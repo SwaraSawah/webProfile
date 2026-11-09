@@ -50,7 +50,7 @@
       font-weight: 600;
     }
 
-    input[type="text"], input[type="file"] {
+    input[type="text"], input[type="file"], select {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #ccc;
@@ -219,9 +219,37 @@
     <div id="galleryStatus" class="status-msg"></div>
   </div>
 
-  <!-- KONTROL 5: PENGATURAN CACHE FLEKSIBEL (FITUR BARU) -->
+  <!-- KONTROL 5: TAMBAH / UPDATE MENU PRODUK -->
   <div class="panel">
-    <h3>5. Kontrol Cache PWA & Offline</h3>
+    <h3>5. Tambah Produk Menu Baru</h3>
+    <label for="menuCategorySelect">Kategori Menu</label>
+    <select id="menuCategorySelect">
+      <option value="minuman">Minuman</option>
+      <option value="ringan">Makanan Ringan</option>
+      <option value="berat">Makanan Berat</option>
+    </select>
+
+    <label for="menuNameInput">Nama Menu Produk</label>
+    <input type="text" id="menuNameInput" placeholder="Contoh: Es Kopi Gula Aren">
+
+    <label for="menuPriceInput">Harga Produk</label>
+    <input type="text" id="menuPriceInput" placeholder="Contoh: Rp 18.000">
+
+    <label for="menuUrlInput">Pilihan A: Link URL Foto Menu</label>
+    <input type="text" id="menuUrlInput" placeholder="https://domain.com/menu.jpg">
+
+    <div class="divider">ATAU UPLOAD FOTO MENU</div>
+
+    <label for="menuFileInput">Pilihan B: Upload File Foto Menu (via Cloudinary)</label>
+    <input type="file" id="menuFileInput" accept="image/*">
+
+    <button onclick="saveMenuItem()">Tambah Menu Produk</button>
+    <div id="menuStatus" class="status-msg"></div>
+  </div>
+
+  <!-- KONTROL 6: PENGATURAN CACHE FLEKSIBEL -->
+  <div class="panel">
+    <h3>6. Kontrol Cache PWA & Offline</h3>
     <label>Kelola penyimpanan cache browser untuk pembaruan instan</label>
     <button style="background-color: #d97706; margin-bottom: 8px;" onclick="clearAppCache()">Bersihkan & Perbarui Cache Aplikasi</button>
     <div id="cacheStatus" class="status-msg"></div>
@@ -246,6 +274,24 @@
     const CLOUDINARY_CLOUD_NAME = "do4j9uw5r"; 
     const CLOUDINARY_UPLOAD_PRESET = "swara_sawah"; 
 
+    // --- DEFAULT MENU STRUCTURE ---
+    const DEFAULT_MENU = [
+      { id:'minuman', name:'Minuman', items:[
+        { id:'min-1', name:'Kopi Susu Sawah', price:'Rp 18.000', photo:'' },
+        { id:'min-2', name:'Es Teh Serai', price:'Rp 12.000', photo:'' },
+        { id:'min-3', name:'Wedang Jahe Madu', price:'Rp 15.000', photo:'' }
+      ]},
+      { id:'ringan', name:'Makanan Ringan', items:[
+        { id:'ring-1', name:'Pisang Goreng Keju', price:'Rp 15.000', photo:'' },
+        { id:'ring-2', name:'Tahu Crispy Sambal Matah', price:'Rp 17.000', photo:'' },
+        { id:'ring-3', name:'Singkong Keju', price:'Rp 14.000', photo:'' }
+      ]},
+      { id:'berat', name:'Makanan Berat', items:[
+        { id:'berat-1', name:'Nasi Goreng Sawah', price:'Rp 25.000', photo:'' },
+        { id:'berat-2', name:'Mie Godog Jawa', price:'Rp 23.000', photo:'' }
+      ]}
+    ];
+
     // --- 1. LOGIKA LINK LOKASI ---
     function saveLocation() {
       const val = document.getElementById('mapInput').value.trim();
@@ -266,11 +312,6 @@
       const fileInput = document.getElementById('logoFileInput');
       if (!fileInput.files[0]) return alert('Pilih file gambar logo terlebih dahulu!');
       
-      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
-        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
-        return;
-      }
-
       document.getElementById('logoStatus').innerText = 'Mengupload logo ke cloud...';
       try {
         const url = await uploadToCloudinary(fileInput.files[0]);
@@ -293,11 +334,6 @@
       const fileInput = document.getElementById('heroFileInput');
       if (!fileInput.files[0]) return alert('Pilih file foto utama terlebih dahulu!');
       
-      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
-        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
-        return;
-      }
-
       document.getElementById('heroStatus').innerText = 'Mengupload foto utama ke cloud...';
       try {
         const url = await uploadToCloudinary(fileInput.files[0]);
@@ -321,11 +357,6 @@
       const files = document.getElementById('galleryFileInput').files;
       if (files.length === 0) return alert('Pilih minimal 1 file gambar!');
 
-      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
-        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
-        return;
-      }
-
       document.getElementById('galleryStatus').innerText = `Mengupload ${files.length} foto ke cloud...`;
       try {
         const uploadedUrls = [];
@@ -340,14 +371,62 @@
       }
     }
 
-    // --- 5. LOGIKA KONTROL CACHE FLEKSIBEL ---
+    // --- 5. LOGIKA MENU PRODUK ---
+    async function saveMenuItem() {
+      const catId = document.getElementById('menuCategorySelect').value;
+      const name = document.getElementById('menuNameInput').value.trim();
+      const price = document.getElementById('menuPriceInput').value.trim();
+      const photoUrl = document.getElementById('menuUrlInput').value.trim();
+      const fileInput = document.getElementById('menuFileInput');
+
+      if (!name || !price) {
+        return alert('Nama menu dan harga produk wajib diisi!');
+      }
+
+      let finalPhoto = photoUrl;
+      const statusEl = document.getElementById('menuStatus');
+
+      if (!finalPhoto && fileInput.files[0]) {
+        statusEl.innerText = 'Mengupload foto produk ke cloud...';
+        try {
+          finalPhoto = await uploadToCloudinary(fileInput.files[0]);
+        } catch (err) {
+          return alert('Gagal upload foto menu: ' + err.message);
+        }
+      }
+
+      let menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+      let targetCat = menuData.find(c => c.id === catId);
+
+      if (!targetCat) {
+        targetCat = { id: catId, name: catId.charAt(0).toUpperCase() + catId.slice(1), items: [] };
+        menuData.push(targetCat);
+      }
+
+      const newItem = {
+        id: 'prod-' + Date.now(),
+        name: name,
+        price: price,
+        photo: finalPhoto || ''
+      };
+
+      targetCat.items.push(newItem);
+      localStorage.setItem('ts_menu', JSON.stringify(menuData));
+      
+      statusEl.innerText = '✓ Produk menu berhasil ditambahkan!';
+      document.getElementById('menuNameInput').value = '';
+      document.getElementById('menuPriceInput').value = '';
+      document.getElementById('menuUrlInput').value = '';
+      fileInput.value = '';
+    }
+
+    // --- 6. LOGIKA KONTROL CACHE FLEKSIBEL ---
     async function clearAppCache() {
       if ('caches' in window) {
         try {
           const cacheKeys = await caches.keys();
           await Promise.all(cacheKeys.map(key => caches.delete(key)));
           
-          // Unregister Service Worker agar memaksa mengambil versi terbaru
           if ('serviceWorker' in navigator) {
             const registrations = await navigator.serviceWorker.getRegistrations();
             for (let registration of registrations) {
@@ -415,7 +494,6 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      // Tampilkan banner popup install
       installBanner.style.display = 'flex';
     });
 

@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -97,30 +97,6 @@ l<!DOCTYPE html>
     position: relative;
     border-radius: 0;
   }
-  .tsk-gallery-dots{
-    position: absolute;
-    bottom: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
-    z-index: 10;
-    background: rgba(42, 42, 32, 0.4);
-    padding: 6px 12px;
-    border-radius: 999px;
-    backdrop-filter: blur(6px);
-  }
-  .tsk-gallery-dot{
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
-  }
-  .tsk-gallery-dot.active{ background: #ffffff; transform: scale(1.3); }
 
   .tsk-menu-cat{ margin-bottom:32px; }
   .tsk-menu-cat h3{ font-size:20px; color:var(--accent); margin:0 0 6px 0; }
@@ -212,7 +188,6 @@ l<!DOCTYPE html>
     <p class="tsk-gallery-intro">Momen santai di tepi sawah — bergeser otomatis, bisa di-swipe atau klik foto untuk pratinjau.</p>
     <div class="tsk-gallery-container" id="galleryContainer">
       <div id="galleryTrack" class="tsk-gallery-track"></div>
-      <div class="tsk-gallery-dots" id="galleryDots"></div>
     </div>
   </section>
 
@@ -322,7 +297,6 @@ function renderHero(){
 
 function renderGallery(){
   const track = document.getElementById('galleryTrack');
-  const dotsContainer = document.getElementById('galleryDots');
   let items = DATA.gallery.length
     ? DATA.gallery.map((url, i) => ({ url, label:`Foto ${i+1}` }))
     : Array.from({length: DEFAULT_GALLERY_COUNT}, (_, i) => ({ url:'', label:`Foto ${i+1}` }));
@@ -333,12 +307,7 @@ function renderGallery(){
       : `<div class="tsk-photo tsk-placeholder">${escapeHtml(it.label)}</div>`
   ).join('');
 
-  dotsContainer.innerHTML = items.map((_, i) =>
-    `<button class="tsk-gallery-dot ${i === 0 ? 'active' : ''}" data-index="${i}" aria-label="Slide ${i+1}"></button>`
-  ).join('');
-
   const slides = track.querySelectorAll('.tsk-photo');
-  const dots = dotsContainer.querySelectorAll('.tsk-gallery-dot');
   
   slides.forEach((child, i) => {
     const it = items[i];
@@ -352,23 +321,8 @@ function renderGallery(){
         left: slides[index].offsetLeft,
         behavior: 'smooth'
       });
-      updateDots(index);
     }
   }
-
-  function updateDots(index) {
-    dots.forEach((d, idx) => {
-      d.classList.toggle('active', idx === index);
-    });
-  }
-
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      currentIndex = i;
-      scrollToSlide(currentIndex);
-      resetTimer();
-    });
-  });
 
   let scrollTimeout;
   track.addEventListener('scroll', () => {
@@ -378,7 +332,6 @@ function renderGallery(){
       const newIndex = Math.round(track.scrollLeft / slideWidth);
       if (newIndex !== currentIndex && newIndex >= 0 && newIndex < items.length) {
         currentIndex = newIndex;
-        updateDots(currentIndex);
       }
     }, 50);
   });
@@ -394,11 +347,6 @@ function renderGallery(){
         scrollToSlide(currentIndex);
       }
     }, 3800);
-  }
-
-  function resetTimer() {
-    clearInterval(autoPlayTimer);
-    startTimer();
   }
 
   container.addEventListener('mouseenter', () => { isUserInteracting = true; });
