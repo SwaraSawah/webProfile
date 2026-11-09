@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Tepi Sawah</title>
+  <title>Admin Dashboard - SWARA SAWAH</title>
 
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json">
@@ -184,14 +184,22 @@
 </head>
 <body>
 
-  <h2>Dashboard Admin Tepi Sawah</h2>
+  <h2>Dashboard Admin SWARA SAWAH</h2>
 
-  <!-- KONTROL 1: LINK LOKASI -->
+  <!-- KONTROL 1: PENGATURAN LOKASI & JAM BUKA -->
   <div class="panel">
-    <h3>1. Ubah Link Lokasi Google Maps</h3>
-    <label for="mapInput">URL Google Maps Baru</label>
+    <h3>1. Pengaturan Lokasi &amp; Jam Buka</h3>
+
+    <label for="mapInput">URL Google Maps</label>
     <input type="text" id="mapInput" placeholder="https://maps.app.goo.gl/xxx">
-    <button onclick="saveLocation()">Simpan Link Lokasi</button>
+
+    <label for="daysInput">Hari Buka</label>
+    <input type="text" id="daysInput" placeholder="Contoh: Setiap hari / Senin – Minggu">
+
+    <label for="hoursInput">Jam Buka</label>
+    <input type="text" id="hoursInput" placeholder="Contoh: 08.00 – 21.00 WIB">
+
+    <button onclick="saveLocation()">Simpan Pengaturan Lokasi</button>
     <div id="mapStatus" class="status-msg"></div>
   </div>
 
@@ -263,7 +271,7 @@
     <div id="cacheStatus" class="status-msg"></div>
   </div>
 
-  <!-- KONTROL 7: PRATINJAU SEMUA FOTO TERUPLOAD (BARU) -->
+  <!-- KONTROL 7: PRATINJAU SEMUA FOTO TERUPLOAD -->
   <div class="panel">
     <h3>7. Pratinjau Semua Foto Terupload</h3>
     <label>Ringkasan seluruh foto yang tersimpan di perangkat ini beserta detailnya.</label>
@@ -290,8 +298,7 @@
     const CLOUDINARY_UPLOAD_PRESET = "swara_sawah";
 
     // ========================================================
-    // DEFAULT MENU (fix bug: sebelumnya variabel ini tidak didefinisikan
-    // sehingga panel produk blank dan opsi edit/hapus tidak muncul)
+    // DEFAULT MENU (dikosongkan — menu murni diisi via admin)
     // ========================================================
     const DEFAULT_MENU = [];
 
@@ -302,12 +309,23 @@
       renderAllPhotosPreview();
     }
 
-    // --- 1. LOGIKA LINK LOKASI ---
+    // --- 1. LOGIKA LOKASI & JAM BUKA ---
     function saveLocation() {
-      const val = document.getElementById('mapInput').value.trim();
-      if (!val) return alert('Link lokasi tidak boleh kosong!');
-      localStorage.setItem('ts_map_link', val);
-      document.getElementById('mapStatus').innerText = '✓ Link lokasi berhasil diperbarui!';
+      const mapVal = document.getElementById('mapInput').value.trim();
+      const daysVal = document.getElementById('daysInput').value.trim();
+      const hoursVal = document.getElementById('hoursInput').value.trim();
+
+      if (!mapVal) return alert('URL Google Maps tidak boleh kosong!');
+
+      localStorage.setItem('ts_map_link', mapVal);
+
+      if (daysVal) localStorage.setItem('ts_days', daysVal);
+      else localStorage.removeItem('ts_days');
+
+      if (hoursVal) localStorage.setItem('ts_hours', hoursVal);
+      else localStorage.removeItem('ts_hours');
+
+      document.getElementById('mapStatus').innerText = '✓ Pengaturan lokasi & jam buka berhasil diperbarui!';
     }
 
     // --- 2. LOGIKA LOGO (hanya via file upload) ---
@@ -432,7 +450,6 @@
 
     // ============================================================
     // PRATINJAU SEMUA FOTO TERUPLOAD (panel 7 paling bawah)
-    // Menampilkan: thumbnail, tipe, label, dimensi, URL, tombol hapus
     // ============================================================
     function renderAllPhotosPreview() {
       const container = document.getElementById('allPhotosPreview');
@@ -643,7 +660,6 @@
       document.getElementById('menuSubmitBtn').innerText = 'Simpan Perubahan Produk';
       document.getElementById('menuCancelEditBtn').style.display = 'block';
 
-      // Scroll ke form (pakai scrollIntoView agar akurat)
       document.getElementById('menuFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -716,13 +732,17 @@
       const savedMap = localStorage.getItem('ts_map_link');
       if (savedMap) document.getElementById('mapInput').value = savedMap;
 
+      const savedDays = localStorage.getItem('ts_days');
+      if (savedDays) document.getElementById('daysInput').value = savedDays;
+
+      const savedHours = localStorage.getItem('ts_hours');
+      if (savedHours) document.getElementById('hoursInput').value = savedHours;
+
       refreshAllPreviews();
     });
 
     // ============================================================
     // PWA SERVICE WORKER REGISTRATION & INSTALL LOGIC
-    // (Diperbaiki: deteksi dini HTTPS/localhost, appinstalled handler,
-    //  pesan fallback manual yang lebih jelas)
     // ============================================================
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
                       || window.navigator.standalone === true;
@@ -745,8 +765,6 @@
       });
     }
 
-    // Event `beforeinstallprompt` hanya fire pada HTTPS/localhost
-    // dan saat kriteria PWA terpenuhi (manifest + ikon + SW aktif).
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -755,7 +773,6 @@
       }
     });
 
-    // Deteksi kalau aplikasi sudah berhasil diinstall
     window.addEventListener('appinstalled', () => {
       console.log('PWA berhasil diinstall.');
       isAppInstalled = true;

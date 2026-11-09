@@ -60,20 +60,17 @@
   .tsk-cta{ border:1.5px solid var(--accent); color:var(--accent); padding:14px 28px; border-radius:999px; font-weight:600; font-size:15px; display:inline-block; width:fit-content; }
 
   /* =========================================================
-     KONTAINER FOTO: Potret (Portrait) di HP & Tablet,
-     Lanskap (Landscape) di Desktop saja (>= 1025px).
+     KONTAINER FOTO: Potret di HP & Tablet, Lanskap di Desktop
      ========================================================= */
   .tsk-hero-photo,
   .tsk-gallery-container,
-  .tsk-menu-photo,
-  .tsk-map {
-    aspect-ratio: 3 / 4; /* Portrait default (mobile & tablet) */
+  .tsk-menu-photo {
+    aspect-ratio: 3 / 4;
   }
   @media (min-width: 1025px) {
-    .tsk-hero-photo      { aspect-ratio: 4 / 3; }   /* Landscape */
-    .tsk-gallery-container { aspect-ratio: 16 / 10; } /* Landscape */
-    .tsk-menu-photo      { aspect-ratio: 4 / 3; }   /* Landscape */
-    .tsk-map             { aspect-ratio: 16 / 10; } /* Landscape */
+    .tsk-hero-photo      { aspect-ratio: 4 / 3; }
+    .tsk-gallery-container { aspect-ratio: 16 / 10; }
+    .tsk-menu-photo      { aspect-ratio: 4 / 3; }
   }
 
   .tsk-hero-photo{ flex:1 1 420px; min-width:280px; border-radius:16px; border:1px dashed var(--ph-border); overflow:hidden; }
@@ -133,8 +130,32 @@
   .tsk-lokasi-text{ flex:1 1 320px; min-width:0; display:flex; flex-direction:column; gap:12px; }
   .tsk-lokasi-text h2{ font-size:28px; }
   .tsk-lokasi-text p{ margin:0; font-size:15px; color:var(--text-muted); line-height:1.7; }
-  .tsk-hubungi{ margin-top:8px; align-self:flex-start; background:var(--accent); color:var(--bg); padding:12px 26px; border-radius:999px; font-weight:600; font-size:14px; }
-  .tsk-map{ flex:1 1 320px; min-width:280px; border-radius:14px; border:1px dashed var(--ph-border); overflow:hidden; }
+
+  /* =========================================================
+     Tombol "Lokasi" dengan ikon khas Google Maps
+     (pengganti card peta besar)
+     ========================================================= */
+  .tsk-map-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    align-self: flex-start;
+    margin-top: 8px;
+    transition: background .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .tsk-map-btn:hover{
+    background: var(--accent);
+    color: var(--bg);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -10px rgba(63,79,48,.5);
+  }
+  .tsk-map-btn svg{ flex-shrink: 0; }
 
   .tsk-footer{ padding:24px 48px; border-top:1px solid var(--border); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
   .tsk-footer small{ font-size:13px; color:var(--ph-text); }
@@ -142,7 +163,7 @@
   .tsk-footer-links a{ font-size:13px; color:var(--text-muted); }
 
   /* =========================================================
-     MODAL PREVIEW — Natural Size (sesuai foto upload) + 3D
+     MODAL PREVIEW — Natural Size + 3D
      ========================================================= */
   .tsk-modal-overlay{
     position:fixed; inset:0; background:rgba(42,42,32,.78); z-index:50;
@@ -160,7 +181,6 @@
   }
   @keyframes tsk-pop{ from{ transform:scale(.92); opacity:0; } to{ transform:scale(1); opacity:1; } }
 
-  /* Pratinjau foto mengikuti ukuran asli upload, tapi dibatasi viewport */
   .tsk-modal-photo{
     border-radius:12px; margin-bottom:16px;
     display:flex; align-items:center; justify-content:center;
@@ -182,21 +202,12 @@
   }
 
   .tsk-btn{ border:none; padding:10px 24px; border-radius:999px; font-weight:600; cursor:pointer; font-size:14px; background:var(--accent); color:var(--bg); }
-
-  /* Placeholder link-out untuk short link Google Maps yang tidak bisa di-embed */
-  .tsk-map-fallback{
-    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-    background:var(--ph-bg); color:var(--ph-text); text-align:center; padding:16px;
-    transition: background .25s ease;
-  }
-  .tsk-map-fallback:hover{ background:#dfe7cd; }
-  .tsk-map-fallback svg{ color:var(--accent); }
 </style>
 </head>
 <body>
 
   <header class="tsk-header">
-    <span class="tsk-logo-name">Tepi Sawah</span>
+    <span class="tsk-logo-name">Swara Sawah</span>
     <nav class="tsk-nav-links">
       <a href="#nilai-plus">Nilai Plus</a>
       <a href="#galeri">Galeri</a>
@@ -210,9 +221,9 @@
 
   <section class="tsk-hero">
     <div class="tsk-hero-text">
-      <span class="tsk-eyebrow">Nongkrong Tepi Sawah</span>
-      <h1>Ngobrol Santai, Ditemani Hijaunya Sawah</h1>
-      <p>Duduk santai di saung kayu, rasakan angin sejuk dan pemandangan sawah yang masih alami. Tempat yang pas buat lepas penat, ngumpul bareng teman, atau sekadar menikmati senja.</p>
+      <span class="tsk-eyebrow">REKOMENDASI•TEMPAT•NONGKI</span>
+      <h1>Ngobrol Santai, Ditemani View Sawah Yang Alami</h1>
+      <p>Duduk santai dan rasakan hembusan angin sejuk serta pemandangan yang menyejukan hati. Tempat yang pas buat lepas penat, ngumpul bareng teman, atau sekadar menikmati senja dengan segelas kopi.</p>
       <a href="#lokasi" class="tsk-cta">Lokasi &amp; Jam Buka</a>
     </div>
     <div id="heroBtn" class="tsk-hero-photo tsk-photo"></div>
@@ -239,7 +250,7 @@
       <div class="tsk-value-card">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#3F4F30" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"></path></svg>
         <h3>Tempat Ngobrol Santai</h3>
-        <p>Saung lesehan dan gazebo terbuka, nyaman buat ngumpul lama.</p>
+        <p>Bukan tempat mewah, tetapi punya view dan vibes yang bikin betah, nyaman buat ngumpul lama.</p>
       </div>
     </div>
   </section>
@@ -260,20 +271,22 @@
   <section id="lokasi" class="tsk-lokasi">
     <div class="tsk-lokasi-text">
       <h2>Lokasi &amp; Jam Buka</h2>
-      <p><span id="addressText"></span><br>Buka setiap hari, <span id="hoursText"></span></p>
-      <p>WhatsApp: [Nomor WhatsApp]</p>
-      <a id="hubungiLink" href="#" class="tsk-hubungi">Hubungi Kami</a>
+      <p id="addressText"></p>
+      <p><span id="daysText"></span>, <span id="hoursText"></span></p>
+      <a id="mapBtn" href="#" target="_blank" rel="noopener" class="tsk-map-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#EA4335" d="M12 2C7.58 2 4 5.58 4 10c0 5.5 8 12 8 12s8-6.5 8-12c0-4.42-3.58-8-8-8z"/>
+          <circle cx="12" cy="10" r="3" fill="#fff"/>
+        </svg>
+        Lokasi
+      </a>
     </div>
-    <a id="mapBtn" href="#" target="_blank" rel="noopener" class="tsk-map tsk-photo">
-      <div class="tsk-placeholder" style="width:100%;height:100%;border-radius:inherit;">Peta Lokasi</div>
-    </a>
   </section>
 
   <footer class="tsk-footer">
     <small>© Tepi Sawah 2026</small>
     <div class="tsk-footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">WhatsApp</a>
+      <a href="https://www.instagram.com/swraswh?xtok=MTlnNmlteGY3M2kxNg==">Instagram</a>
     </div>
   </footer>
 
@@ -287,10 +300,7 @@
 <script>
 const DEFAULT_GALLERY_COUNT = 10;
 
-// ========================================================
-// DEFAULT MENU (fix bug: sebelumnya referensi ke DEFAULT_MENU
-// tanpa deklarasi -> menyebabkan menu tidak tampil sama sekali)
-// ========================================================
+// DEFAULT MENU dikosongkan — menu murni diisi via admin
 const DEFAULT_MENU = [];
 
 function getStr(key, fallback){
@@ -311,6 +321,7 @@ const DATA = {
   gallery: getJSON('ts_gallery_urls', []),
   menu:    getJSON('ts_menu', DEFAULT_MENU),
   address: getStr('ts_address', '[Alamat Lokasi]'),
+  days:    getStr('ts_days', 'Setiap hari'),
   hours:   getStr('ts_hours', '08.00 – 21.00 WIB'),
   mapLink: getStr('ts_map_link', '')
 };
@@ -452,77 +463,18 @@ function renderMenu(){
 }
 
 // ========================================================
-// PARSING LINK GOOGLE MAPS: otomatis ikut link yang diinput
-// Mendukung format: embed URL, @lat,lng, ?q=lat,lng, ?q=place,
-// /place/Nama/, dan koordinat mentah "lat,lng".
+// RENDER LOKASI: hari, jam, dan tombol "Lokasi" (Maps)
 // ========================================================
-function getMapEmbedUrl(mapLink){
-  if (!mapLink) return null;
-  const link = mapLink.trim();
-
-  // 1. Sudah berupa Embed URL
-  if (link.includes('/maps/embed')) return link;
-
-  // 2. Koordinat mentah: "lat,lng"
-  if (/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(link)){
-    return `https://www.google.com/maps?q=${link}&output=embed`;
-  }
-
-  // 3. Koordinat @lat,lng di URL
-  let m = link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (m) return `https://www.google.com/maps?q=${m[1]},${m[2]}&output=embed`;
-
-  // 4. Koordinat di query ?q=lat,lng
-  m = link.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (m) return `https://www.google.com/maps?q=${m[1]},${m[2]}&output=embed`;
-
-  // 5. Nama tempat di /place/Nama/
-  m = link.match(/\/place\/([^\/@?]+)/);
-  if (m){
-    return `https://www.google.com/maps?q=${encodeURIComponent(decodeURIComponent(m[1]))}&output=embed`;
-  }
-
-  // 6. Nama tempat di query ?q=Nama
-  m = link.match(/[?&]q=([^&]+)/);
-  if (m && !/^https?%3A/i.test(m[1]) && !/^https?:/i.test(m[1])){
-    return `https://www.google.com/maps?q=${m[1]}&output=embed`;
-  }
-
-  // 7. Short link (maps.app.goo.gl / goo.gl/maps) -> tidak bisa di-embed murni client-side
-  return null;
-}
-
 function renderLocation(){
   document.getElementById('addressText').textContent = DATA.address;
-  document.getElementById('hoursText').textContent = DATA.hours;
-  const hubungiLink = document.getElementById('hubungiLink');
+  document.getElementById('daysText').textContent   = DATA.days;
+  document.getElementById('hoursText').textContent  = DATA.hours;
+
   const mapBtn = document.getElementById('mapBtn');
-
   if (DATA.mapLink) {
-    hubungiLink.href = DATA.mapLink;
     mapBtn.href = DATA.mapLink;
-
-    const embedSrc = getMapEmbedUrl(DATA.mapLink);
-    if (embedSrc) {
-      mapBtn.innerHTML = `<iframe src="${embedSrc}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
-    } else {
-      // Short link — tampilkan tombol "Buka di Google Maps" yang tetap mengikuti link
-      mapBtn.innerHTML = `
-        <div class="tsk-map-fallback">
-          <div>
-            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-              <circle cx="12" cy="9" r="2.5"/>
-            </svg>
-            <div style="font-size:14px; font-weight:600; margin-top:8px; color:var(--accent);">Buka Peta Lokasi</div>
-            <div style="font-size:11px; opacity:.75; margin-top:4px;">Klik untuk melihat di Google Maps</div>
-          </div>
-        </div>`;
-    }
   } else {
-    hubungiLink.href = '#';
     mapBtn.href = '#';
-    mapBtn.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;border-radius:inherit;">Peta Lokasi</div>`;
     mapBtn.addEventListener('click', e => e.preventDefault());
   }
 }
