@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - Tepi Sawah</title>
+  
+  <!-- PWA Manifest & Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2E5A36">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Admin Tepi Sawah">
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -12,6 +20,7 @@
       padding: 20px;
       max-width: 650px;
       margin: 0 auto;
+      padding-bottom: 80px; /* Ruang untuk popup PWA */
     }
 
     h2 {
@@ -82,6 +91,74 @@
       color: #2E5A36;
       font-weight: 600;
     }
+
+    /* --- STYLING POPUP INSTALL PWA --- */
+    #pwaInstallBanner {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      max-width: 610px;
+      margin: 0 auto;
+      background: #2E5A36;
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      z-index: 9999;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .pwa-text h4 {
+      margin: 0 0 4px 0;
+      font-size: 1rem;
+    }
+
+    .pwa-text p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #d1e7d4;
+    }
+
+    .pwa-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pwa-actions button {
+      width: auto;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+
+    #btnInstall {
+      background-color: #fff;
+      color: #2E5A36;
+    }
+
+    #btnInstall:hover {
+      background-color: #e2e8f0;
+    }
+
+    #btnCloseInstall {
+      background-color: transparent;
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
+    #btnCloseInstall:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
   </style>
 </head>
 <body>
@@ -142,10 +219,29 @@
     <div id="galleryStatus" class="status-msg"></div>
   </div>
 
+  <!-- KONTROL 5: PENGATURAN CACHE FLEKSIBEL (FITUR BARU) -->
+  <div class="panel">
+    <h3>5. Kontrol Cache PWA & Offline</h3>
+    <label>Kelola penyimpanan cache browser untuk pembaruan instan</label>
+    <button style="background-color: #d97706; margin-bottom: 8px;" onclick="clearAppCache()">Bersihkan & Perbarui Cache Aplikasi</button>
+    <div id="cacheStatus" class="status-msg"></div>
+  </div>
+
+  <!-- POPUP / BANNER INSTALL PWA -->
+  <div id="pwaInstallBanner">
+    <div class="pwa-text">
+      <h4>Install Aplikasi Admin</h4>
+      <p>Akses dashboard lebih cepat seperti aplikasi native langsung dari perangkat Anda.</p>
+    </div>
+    <div class="pwa-actions">
+      <button id="btnInstall">Install</button>
+      <button id="btnCloseInstall">Nanti</button>
+    </div>
+  </div>
+
   <script>
     // ========================================================
     // KONFIGURASI CLOUDINARY ANDA
-    // Ganti "YOUR_CLOUD_NAME" dan "swara_sawah" dengan akun Anda.
     // ========================================================
     const CLOUDINARY_CLOUD_NAME = "do4j9uw5r"; 
     const CLOUDINARY_UPLOAD_PRESET = "swara_sawah"; 
@@ -244,6 +340,33 @@
       }
     }
 
+    // --- 5. LOGIKA KONTROL CACHE FLEKSIBEL ---
+    async function clearAppCache() {
+      if ('caches' in window) {
+        try {
+          const cacheKeys = await caches.keys();
+          await Promise.all(cacheKeys.map(key => caches.delete(key)));
+          
+          // Unregister Service Worker agar memaksa mengambil versi terbaru
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+              await registration.unregister();
+            }
+          }
+          
+          document.getElementById('cacheStatus').innerText = '✓ Cache berhasil dibersihkan! Halaman akan dimuat ulang...';
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } catch (err) {
+          alert('Gagal membersihkan cache: ' + err.message);
+        }
+      } else {
+        alert('Browser tidak mendukung cache API.');
+      }
+    }
+
     // --- HELPER FUNCTION: CLOUDINARY UPLOAD API ---
     async function uploadToCloudinary(file) {
       const formData = new FormData();
@@ -273,6 +396,43 @@
 
       const savedGallery = JSON.parse(localStorage.getItem('ts_gallery_urls'));
       if (savedGallery) document.getElementById('galleryUrlsInput').value = savedGallery.join(', ');
+    });
+
+    // --- PWA SERVICE WORKER REGISTRATION & INSTALL POPUP LOGIC ---
+    let deferredPrompt;
+    const installBanner = document.getElementById('pwaInstallBanner');
+    const btnInstall = document.getElementById('btnInstall');
+    const btnCloseInstall = document.getElementById('btnCloseInstall');
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker terdaftar:', reg.scope))
+          .catch(err => console.log('Gagal mendaftarkan Service Worker:', err));
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Tampilkan banner popup install
+      installBanner.style.display = 'flex';
+    });
+
+    btnInstall.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('Pengguna menerima instalasi PWA');
+        }
+        deferredPrompt = null;
+        installBanner.style.display = 'none';
+      }
+    });
+
+    btnCloseInstall.addEventListener('click', () => {
+      installBanner.style.display = 'none';
     });
   </script>
 </body>
