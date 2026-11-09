@@ -1,0 +1,472 @@
+l<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tepi Sawah — Nongkrong Tenang di Pinggir Sawah</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --accent:#3F4F30;
+    --accent-2:#A97C50;
+    --bg:#F6F2E9;
+    --bg-alt:#EFEADC;
+    --border:#DED5C0;
+    --ph-bg:#E9EDDD;
+    --ph-border:#B9C79E;
+    --ph-text:#6B7A52;
+    --text:#2A2A20;
+    --text-muted:#55533F;
+  }
+  *, *::before, *::after{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Work Sans',sans-serif;
+  }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ color:var(--accent-2); }
+  button, input, select{ font-family:inherit; }
+  h1,h2,h3{ font-family:'Fraunces',serif; margin:0; }
+  section{ padding:56px 48px; }
+  @media (max-width:640px){
+    section{ padding:40px 20px; }
+    .tsk-nav-links{ display:none !important; }
+  }
+
+  .tsk-photo{ cursor:pointer; transition:transform .35s ease, box-shadow .35s ease; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .tsk-photo:hover{ transform:perspective(700px) rotateX(4deg) rotateY(-4deg) scale(1.02); box-shadow:0 18px 30px -12px rgba(42,42,32,.35); }
+  .tsk-photo img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:inherit; }
+  .tsk-placeholder{
+    background:var(--ph-bg); border-radius:12px; display:flex; align-items:center;
+    justify-content:center; color:var(--ph-text); font-size:13px; text-align:center; padding:8px; width:100%; height:100%;
+  }
+
+  .tsk-header{ display:flex; align-items:center; justify-content:space-between; padding:20px 48px; flex-wrap:wrap; gap:16px; border-bottom:1px solid var(--border); }
+  .tsk-logo-name{ font-family:'Fraunces',serif; font-size:24px; font-weight:600; color:var(--accent); }
+  .tsk-nav-links{ display:flex; gap:28px; flex-wrap:wrap; align-items:center; }
+  .tsk-nav-links a{ font-size:15px; color:var(--text); }
+  .tsk-logo-btn{ width:44px; height:44px; border-radius:50%; background:var(--accent); border:none; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; padding:0; }
+  .tsk-logo-btn span{ color:var(--bg); font-size:11px; font-weight:700; letter-spacing:.03em; }
+
+  .tsk-hero{ display:flex; flex-wrap:wrap; gap:48px; align-items:center; }
+  .tsk-hero-text{ flex:1 1 420px; min-width:0; display:flex; flex-direction:column; gap:20px; }
+  .tsk-eyebrow{ font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-2); font-weight:600; }
+  .tsk-hero-text h1{ font-size:48px; line-height:1.15; color:var(--text); }
+  .tsk-hero-text p{ font-size:17px; line-height:1.6; color:var(--text-muted); margin:0; }
+  .tsk-cta{ border:1.5px solid var(--accent); color:var(--accent); padding:14px 28px; border-radius:999px; font-weight:600; font-size:15px; display:inline-block; width:fit-content; }
+  .tsk-hero-photo{ flex:1 1 420px; min-width:280px; aspect-ratio:4/3; border-radius:16px; border:1px dashed var(--ph-border); overflow:hidden; }
+
+  .tsk-value-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; }
+  .tsk-value-card{ background:var(--bg); border-radius:14px; padding:28px 24px; display:flex; flex-direction:column; gap:14px; }
+  .tsk-value-card h3{ font-size:17px; }
+  .tsk-value-card p{ margin:0; font-size:14px; color:var(--text-muted); line-height:1.5; }
+
+  .tsk-gallery-intro{ margin:0 0 28px 0; color:var(--text-muted); font-size:15px; }
+  .tsk-gallery-container{
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    aspect-ratio: 16/10;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 25px -5px rgba(42,42,32,.1);
+  }
+  .tsk-gallery-track{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .tsk-gallery-track::-webkit-scrollbar{ display: none; }
+  .tsk-gallery-track .tsk-photo{
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: 0;
+  }
+  .tsk-gallery-dots{
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    background: rgba(42, 42, 32, 0.4);
+    padding: 6px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .tsk-gallery-dot{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .tsk-gallery-dot.active{ background: #ffffff; transform: scale(1.3); }
+
+  .tsk-menu-cat{ margin-bottom:32px; }
+  .tsk-menu-cat h3{ font-size:20px; color:var(--accent); margin:0 0 6px 0; }
+  .tsk-menu-list{ background:var(--bg); border-radius:14px; padding:4px 20px; }
+  .tsk-menu-item{ border-bottom:1px solid var(--border); padding:4px 0; }
+  .tsk-menu-item:last-child{ border-bottom:none; }
+  .tsk-menu-toggle{ width:100%; background:none; border:none; text-align:left; padding:14px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:inherit; }
+  .tsk-menu-toggle .tsk-name{ font-weight:600; font-size:15px; }
+  .tsk-menu-toggle .tsk-right{ display:flex; align-items:center; gap:14px; }
+  .tsk-menu-toggle .tsk-price{ font-weight:600; font-size:14px; color:var(--accent-2); }
+  .tsk-menu-toggle .tsk-icon{ font-size:18px; color:var(--accent); width:16px; text-align:center; }
+  
+  .tsk-menu-photo{ width:100%; max-width:260px; aspect-ratio:4/3; border-radius:12px; overflow:hidden; margin:0 auto 16px auto; display:none; justify-content:center; align-items:center; }
+  .tsk-menu-item.open .tsk-menu-photo{ display:flex; }
+
+  .tsk-lokasi{ display:flex; flex-wrap:wrap; gap:40px; }
+  .tsk-lokasi-text{ flex:1 1 320px; min-width:0; display:flex; flex-direction:column; gap:12px; }
+  .tsk-lokasi-text h2{ font-size:28px; }
+  .tsk-lokasi-text p{ margin:0; font-size:15px; color:var(--text-muted); line-height:1.7; }
+  .tsk-hubungi{ margin-top:8px; align-self:flex-start; background:var(--accent); color:var(--bg); padding:12px 26px; border-radius:999px; font-weight:600; font-size:14px; }
+  .tsk-map{ flex:1 1 320px; min-width:280px; aspect-ratio:16/10; border-radius:14px; border:1px dashed var(--ph-border); overflow:hidden; }
+
+  .tsk-footer{ padding:24px 48px; border-top:1px solid var(--border); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .tsk-footer small{ font-size:13px; color:var(--ph-text); }
+  .tsk-footer-links{ display:flex; gap:16px; align-items:center; }
+  .tsk-footer-links a{ font-size:13px; color:var(--text-muted); }
+
+  .tsk-modal-overlay{ position:fixed; inset:0; background:rgba(42,42,32,.75); z-index:50; display:none; align-items:center; justify-content:center; padding:24px; }
+  .tsk-modal-overlay.show{ display:flex; }
+  .tsk-modal-card{ background:var(--bg); border-radius:16px; padding:28px; max-width:460px; width:100%; max-height:85vh; overflow-y:auto; animation:tsk-pop .22s ease; display:flex; flex-direction:column; align-items:center; }
+  @keyframes tsk-pop{ from{ transform:scale(.92); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .tsk-modal-photo{ width:100%; aspect-ratio:4/3; border-radius:12px; margin-bottom:16px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .tsk-btn{ border:none; padding:10px 24px; border-radius:999px; font-weight:600; cursor:pointer; font-size:14px; background:var(--accent); color:var(--bg); }
+</style>
+</head>
+<body>
+
+  <header class="tsk-header">
+    <span class="tsk-logo-name">Tepi Sawah</span>
+    <nav class="tsk-nav-links">
+      <a href="#nilai-plus">Nilai Plus</a>
+      <a href="#galeri">Galeri</a>
+      <a href="#menu">Menu</a>
+      <a href="#lokasi">Lokasi</a>
+    </nav>
+    <button id="logoBtn" class="tsk-logo-btn tsk-photo" aria-label="Pratinjau logo">
+      <span>LOGO</span>
+    </button>
+  </header>
+
+  <section class="tsk-hero">
+    <div class="tsk-hero-text">
+      <span class="tsk-eyebrow">Nongkrong Tepi Sawah</span>
+      <h1>Ngobrol Santai, Ditemani Hijaunya Sawah</h1>
+      <p>Duduk santai di saung kayu, rasakan angin sejuk dan pemandangan sawah yang masih alami. Tempat yang pas buat lepas penat, ngumpul bareng teman, atau sekadar menikmati senja.</p>
+      <a href="#lokasi" class="tsk-cta">Lokasi &amp; Jam Buka</a>
+    </div>
+    <div id="heroBtn" class="tsk-hero-photo tsk-photo"></div>
+  </section>
+
+  <section id="nilai-plus" style="background:var(--bg-alt);">
+    <h2 style="font-size:30px; margin:0 0 32px 0;">Kenapa Harus Ke Sini?</h2>
+    <div class="tsk-value-grid">
+      <div class="tsk-value-card">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#3F4F30" stroke-width="1.8" aria-hidden="true"><path d="M5 19c7-1 13-6 14-14-8 0-13 5-14 13 0 .3 0 .7 0 1z"></path><path d="M6 18c2-3 5-6 9-8"></path></svg>
+        <h3>View Sawah Alami</h3>
+        <p>Hamparan hijau yang masih asli, belum banyak tersentuh bangunan.</p>
+      </div>
+      <div class="tsk-value-card">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#3F4F30" stroke-width="1.8" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3"></path><path d="M3 13h15a3 3 0 1 1-3 3"></path><path d="M3 18h9a2.5 2.5 0 1 0-2.5-2.5"></path></svg>
+        <h3>Udara Segar &amp; Sejuk</h3>
+        <p>Jauh dari polusi kota, angin sawah bikin napas terasa lebih ringan.</p>
+      </div>
+      <div class="tsk-value-card">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#3F4F30" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <h3>Suasana Tenang</h3>
+        <p>Cocok buat healing, kerja santai, atau sekadar diam menikmati waktu.</p>
+      </div>
+      <div class="tsk-value-card">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#3F4F30" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"></path></svg>
+        <h3>Tempat Ngobrol Santai</h3>
+        <p>Saung lesehan dan gazebo terbuka, nyaman buat ngumpul lama.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeri">
+    <h2 style="font-size:30px; margin:0 0 8px 0;">Galeri Suasana</h2>
+    <p class="tsk-gallery-intro">Momen santai di tepi sawah — bergeser otomatis, bisa di-swipe atau klik foto untuk pratinjau.</p>
+    <div class="tsk-gallery-container" id="galleryContainer">
+      <div id="galleryTrack" class="tsk-gallery-track"></div>
+      <div class="tsk-gallery-dots" id="galleryDots"></div>
+    </div>
+  </section>
+
+  <section id="menu" style="background:var(--bg-alt);">
+    <h2 style="font-size:30px; margin:0 0 32px 0;">Menu Pilihan</h2>
+    <div id="menuWrap"></div>
+  </section>
+
+  <section id="lokasi" class="tsk-lokasi">
+    <div class="tsk-lokasi-text">
+      <h2>Lokasi &amp; Jam Buka</h2>
+      <p><span id="addressText"></span><br>Buka setiap hari, <span id="hoursText"></span></p>
+      <p>WhatsApp: [Nomor WhatsApp]</p>
+      <a id="hubungiLink" href="#" class="tsk-hubungi">Hubungi Kami</a>
+    </div>
+    <a id="mapBtn" href="#" target="_blank" rel="noopener" class="tsk-map tsk-photo">
+      <div class="tsk-placeholder" style="width:100%;height:100%;border-radius:inherit;">Peta Lokasi</div>
+    </a>
+  </section>
+
+  <footer class="tsk-footer">
+    <small>© Tepi Sawah 2026</small>
+    <div class="tsk-footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </footer>
+
+  <div id="modalOverlay" class="tsk-modal-overlay">
+    <div class="tsk-modal-card" onclick="event.stopPropagation()">
+      <div id="modalPhoto" class="tsk-modal-photo"></div>
+      <button class="tsk-btn" onclick="closePreview()">Tutup</button>
+    </div>
+  </div>
+
+<script>
+const DEFAULT_MENU = [
+  { id:'minuman', name:'Minuman', items:[
+    { id:'min-1', name:'Kopi Susu Sawah', price:'Rp 18.000', photo:'' },
+    { id:'min-2', name:'Es Teh Serai', price:'Rp 12.000', photo:'' },
+    { id:'min-3', name:'Wedang Jahe Madu', price:'Rp 15.000', photo:'' }
+  ]},
+  { id:'ringan', name:'Makanan Ringan', items:[
+    { id:'ring-1', name:'Pisang Goreng Keju', price:'Rp 15.000', photo:'' },
+    { id:'ring-2', name:'Tahu Crispy Sambal Matah', price:'Rp 17.000', photo:'' },
+    { id:'ring-3', name:'Singkong Keju', price:'Rp 14.000', photo:'' }
+  ]},
+  { id:'berat', name:'Makanan Berat', items:[
+    { id:'berat-1', name:'Nasi Goreng Sawah', price:'Rp 25.000', photo:'' },
+    { id:'berat-2', name:'Mie Godog Jawa', price:'Rp 23.000', photo:'' }
+  ]}
+];
+const DEFAULT_GALLERY_COUNT = 10;
+
+function getStr(key, fallback){
+  try{ const v = localStorage.getItem(key); return (v && v.trim()) ? v : fallback; }
+  catch(e){ return fallback; }
+}
+function getJSON(key, fallback){
+  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch(e){ return fallback; }
+}
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const DATA = {
+  logo: getStr('ts_logo_url', ''),
+  hero: getStr('ts_hero_url', ''),
+  gallery: getJSON('ts_gallery_urls', []),
+  menu: getJSON('ts_menu', DEFAULT_MENU),
+  address: getStr('ts_address', '[Alamat Lokasi]'),
+  hours: getStr('ts_hours', '08.00 – 21.00 WIB'),
+  mapLink: getStr('ts_map_link', '')
+};
+
+function openPreview(src, label){
+  const photoEl = document.getElementById('modalPhoto');
+  if (src) {
+    photoEl.innerHTML = `<img src="${src}" alt="${escapeHtml(label||'')}">`;
+  } else {
+    photoEl.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;">${escapeHtml(label||'Foto')}</div>`;
+  }
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closePreview(){
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+document.getElementById('modalOverlay').addEventListener('click', closePreview);
+
+function renderLogo(){
+  const btn = document.getElementById('logoBtn');
+  if (DATA.logo){
+    btn.innerHTML = `<img src="${DATA.logo}" alt="Logo Tepi Sawah">`;
+  }
+  btn.addEventListener('click', () => openPreview(DATA.logo, 'Logo Tepi Sawah'));
+}
+function renderHero(){
+  const el = document.getElementById('heroBtn');
+  if (DATA.hero){
+    el.innerHTML = `<img src="${DATA.hero}" alt="Foto Utama Tepi Sawah">`;
+  } else {
+    el.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;border-radius:inherit;">Foto Utama — Suasana Sawah</div>`;
+  }
+  el.addEventListener('click', () => openPreview(DATA.hero, 'Foto Utama — Suasana Sawah'));
+}
+
+function renderGallery(){
+  const track = document.getElementById('galleryTrack');
+  const dotsContainer = document.getElementById('galleryDots');
+  let items = DATA.gallery.length
+    ? DATA.gallery.map((url, i) => ({ url, label:`Foto ${i+1}` }))
+    : Array.from({length: DEFAULT_GALLERY_COUNT}, (_, i) => ({ url:'', label:`Foto ${i+1}` }));
+
+  track.innerHTML = items.map(it =>
+    it.url
+      ? `<div class="tsk-photo"><img src="${it.url}" alt="${escapeHtml(it.label)}"></div>`
+      : `<div class="tsk-photo tsk-placeholder">${escapeHtml(it.label)}</div>`
+  ).join('');
+
+  dotsContainer.innerHTML = items.map((_, i) =>
+    `<button class="tsk-gallery-dot ${i === 0 ? 'active' : ''}" data-index="${i}" aria-label="Slide ${i+1}"></button>`
+  ).join('');
+
+  const slides = track.querySelectorAll('.tsk-photo');
+  const dots = dotsContainer.querySelectorAll('.tsk-gallery-dot');
+  
+  slides.forEach((child, i) => {
+    const it = items[i];
+    child.addEventListener('click', () => openPreview(it.url, it.label));
+  });
+
+  let currentIndex = 0;
+  function scrollToSlide(index) {
+    if (slides[index]) {
+      track.scrollTo({
+        left: slides[index].offsetLeft,
+        behavior: 'smooth'
+      });
+      updateDots(index);
+    }
+  }
+
+  function updateDots(index) {
+    dots.forEach((d, idx) => {
+      d.classList.toggle('active', idx === index);
+    });
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      currentIndex = i;
+      scrollToSlide(currentIndex);
+      resetTimer();
+    });
+  });
+
+  let scrollTimeout;
+  track.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const slideWidth = slides[0]?.offsetWidth || track.clientWidth;
+      const newIndex = Math.round(track.scrollLeft / slideWidth);
+      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < items.length) {
+        currentIndex = newIndex;
+        updateDots(currentIndex);
+      }
+    }, 50);
+  });
+
+  const container = document.getElementById('galleryContainer');
+  let autoPlayTimer;
+  let isUserInteracting = false;
+
+  function startTimer() {
+    autoPlayTimer = setInterval(() => {
+      if (!isUserInteracting) {
+        currentIndex = (currentIndex + 1) % items.length;
+        scrollToSlide(currentIndex);
+      }
+    }, 3800);
+  }
+
+  function resetTimer() {
+    clearInterval(autoPlayTimer);
+    startTimer();
+  }
+
+  container.addEventListener('mouseenter', () => { isUserInteracting = true; });
+  container.addEventListener('mouseleave', () => { isUserInteracting = false; });
+  container.addEventListener('touchstart', () => { isUserInteracting = true; }, {passive: true});
+  container.addEventListener('touchend', () => {
+    setTimeout(() => { isUserInteracting = false; }, 2500);
+  }, {passive: true});
+
+  startTimer();
+}
+
+function renderMenu(){
+  const wrap = document.getElementById('menuWrap');
+  wrap.innerHTML = DATA.menu.map(cat => `
+    <div class="tsk-menu-cat">
+      <h3>${escapeHtml(cat.name)}</h3>
+      <div class="tsk-menu-list">
+        ${cat.items.map(item => `
+          <div class="tsk-menu-item" data-id="${escapeHtml(item.id)}">
+            <button class="tsk-menu-toggle" type="button">
+              <span class="tsk-name">${escapeHtml(item.name)}</span>
+              <span class="tsk-right">
+                <span class="tsk-price">${escapeHtml(item.price)}</span>
+                <span class="tsk-icon">+</span>
+              </span>
+            </button>
+            <div class="tsk-menu-photo tsk-photo">
+              ${item.photo
+                ? `<img src="${item.photo}" alt="${escapeHtml(item.name)}">`
+                : `<div class="tsk-placeholder" style="width:100%;height:100%;">Foto ${escapeHtml(item.name)}</div>`}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  wrap.querySelectorAll('.tsk-menu-item').forEach(row => {
+    const id = row.dataset.id;
+    const item = DATA.menu.flatMap(c => c.items).find(i => i.id === id);
+    const toggleBtn = row.querySelector('.tsk-menu-toggle');
+    const icon = row.querySelector('.tsk-icon');
+    const photoEl = row.querySelector('.tsk-menu-photo');
+
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = row.classList.toggle('open');
+      icon.textContent = isOpen ? '−' : '+';
+    });
+    photoEl.addEventListener('click', () => openPreview(item.photo, `Foto ${item.name}`));
+  });
+}
+
+function renderLocation(){
+  document.getElementById('addressText').textContent = DATA.address;
+  document.getElementById('hoursText').textContent = DATA.hours;
+  const mapsHref = DATA.mapLink || '#';
+  document.getElementById('hubungiLink').href = mapsHref;
+  const mapBtn = document.getElementById('mapBtn');
+  mapBtn.href = mapsHref;
+  mapBtn.addEventListener('click', e => { if (!DATA.mapLink) e.preventDefault(); });
+}
+
+renderLogo();
+renderHero();
+renderGallery();
+renderMenu();
+renderLocation();
+</script>
+</body>
+</html>

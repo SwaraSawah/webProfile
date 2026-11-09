@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Tepi Sawah</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #F4F6F8;
+      color: #333;
+      padding: 20px;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #2E5A36;
+    }
+
+    .panel {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+
+    .panel h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      font-size: 0.9rem;
+    }
+
+    button {
+      width: 100%;
+      background-color: #2E5A36;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #234529;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 12px 0;
+      color: #aaa;
+      font-size: 0.8rem;
+      position: relative;
+    }
+
+    .status-msg {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #2E5A36;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Dashboard Admin Tepi Sawah</h2>
+
+  <!-- KONTROL 1: LINK LOKASI -->
+  <div class="panel">
+    <h3>1. Ubah Link Lokasi Google Maps</h3>
+    <label for="mapInput">URL Google Maps Baru</label>
+    <input type="text" id="mapInput" placeholder="https://maps.app.goo.gl/xxx">
+    <button onclick="saveLocation()">Simpan Link Lokasi</button>
+    <div id="mapStatus" class="status-msg"></div>
+  </div>
+
+  <!-- KONTROL 2: UPLOAD LOGO -->
+  <div class="panel">
+    <h3>2. Ubah Logo Website</h3>
+    <label>Pilihan A: Pakai Link URL Gambar Logo</label>
+    <input type="text" id="logoUrlInput" placeholder="https://domain.com/logo.png">
+    <button onclick="saveLogoUrl()">Gunakan URL Logo Ini</button>
+    
+    <div class="divider">ATAU UPLOAD GAMBAR BARU</div>
+    
+    <label>Pilihan B: Upload File Gambar Logo (via Cloudinary)</label>
+    <input type="file" id="logoFileInput" accept="image/*">
+    <button onclick="uploadLogoCloudinary()">Upload File Logo</button>
+    <div id="logoStatus" class="status-msg"></div>
+  </div>
+
+  <!-- KONTROL 3: UPLOAD FOTO UTAMA (HERO) -->
+  <div class="panel">
+    <h3>3. Ubah Foto Utama (Hero)</h3>
+    <label>Pilihan A: Pakai Link URL Foto Utama</label>
+    <input type="text" id="heroUrlInput" placeholder="https://domain.com/hero.jpg">
+    <button onclick="saveHeroUrl()">Gunakan URL Foto Utama Ini</button>
+    
+    <div class="divider">ATAU UPLOAD GAMBAR BARU</div>
+    
+    <label>Pilihan B: Upload File Foto Utama (via Cloudinary)</label>
+    <input type="file" id="heroFileInput" accept="image/*">
+    <button onclick="uploadHeroCloudinary()">Upload File Foto Utama</button>
+    <div id="heroStatus" class="status-msg"></div>
+  </div>
+
+  <!-- KONTROL 4: UPLOAD GALERI SUASANA -->
+  <div class="panel">
+    <h3>4. Kelola Galeri Suasana (Slider)</h3>
+    <label>Pilihan A: Input Banyak Link URL (Pisahkan dengan Koma)</label>
+    <input type="text" id="galleryUrlsInput" placeholder="https://img1.jpg, https://img2.jpg">
+    <button onclick="saveGalleryUrls()">Simpan Daftar Link Foto</button>
+    
+    <div class="divider">ATAU UPLOAD BEBERAPA FOTO SEKALIGUS</div>
+
+    <label>Pilihan B: Upload Banyak File Foto (via Cloudinary)</label>
+    <input type="file" id="galleryFileInput" accept="image/*" multiple>
+    <button onclick="uploadGalleryCloudinary()">Upload Semua Foto ke Cloud</button>
+    <div id="galleryStatus" class="status-msg"></div>
+  </div>
+
+  <script>
+    // ========================================================
+    // KONFIGURASI CLOUDINARY ANDA
+    // Ganti "YOUR_CLOUD_NAME" dan "swara_sawah" dengan akun Anda.
+    // ========================================================
+    const CLOUDINARY_CLOUD_NAME = "do4j9uw5r"; 
+    const CLOUDINARY_UPLOAD_PRESET = "swara_sawah"; 
+
+    // --- 1. LOGIKA LINK LOKASI ---
+    function saveLocation() {
+      const val = document.getElementById('mapInput').value.trim();
+      if (!val) return alert('Link lokasi tidak boleh kosong!');
+      localStorage.setItem('ts_map_link', val);
+      document.getElementById('mapStatus').innerText = '✓ Link lokasi berhasil diperbarui!';
+    }
+
+    // --- 2. LOGIKA LOGO ---
+    function saveLogoUrl() {
+      const val = document.getElementById('logoUrlInput').value.trim();
+      if (!val) return alert('URL logo tidak boleh kosong!');
+      localStorage.setItem('ts_logo_url', val);
+      document.getElementById('logoStatus').innerText = '✓ Logo berhasil diperbarui dari URL!';
+    }
+
+    async function uploadLogoCloudinary() {
+      const fileInput = document.getElementById('logoFileInput');
+      if (!fileInput.files[0]) return alert('Pilih file gambar logo terlebih dahulu!');
+      
+      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
+        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
+        return;
+      }
+
+      document.getElementById('logoStatus').innerText = 'Mengupload logo ke cloud...';
+      try {
+        const url = await uploadToCloudinary(fileInput.files[0]);
+        localStorage.setItem('ts_logo_url', url);
+        document.getElementById('logoStatus').innerText = '✓ Logo berhasil diupload dan diperbarui!';
+      } catch (err) {
+        alert('Gagal upload: ' + err.message);
+      }
+    }
+
+    // --- 3. LOGIKA FOTO UTAMA (HERO) ---
+    function saveHeroUrl() {
+      const val = document.getElementById('heroUrlInput').value.trim();
+      if (!val) return alert('URL foto utama tidak boleh kosong!');
+      localStorage.setItem('ts_hero_url', val);
+      document.getElementById('heroStatus').innerText = '✓ Foto utama berhasil diperbarui dari URL!';
+    }
+
+    async function uploadHeroCloudinary() {
+      const fileInput = document.getElementById('heroFileInput');
+      if (!fileInput.files[0]) return alert('Pilih file foto utama terlebih dahulu!');
+      
+      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
+        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
+        return;
+      }
+
+      document.getElementById('heroStatus').innerText = 'Mengupload foto utama ke cloud...';
+      try {
+        const url = await uploadToCloudinary(fileInput.files[0]);
+        localStorage.setItem('ts_hero_url', url);
+        document.getElementById('heroStatus').innerText = '✓ Foto utama berhasil diupload dan diperbarui!';
+      } catch (err) {
+        alert('Gagal upload: ' + err.message);
+      }
+    }
+
+    // --- 4. LOGIKA GALERI SUASANA ---
+    function saveGalleryUrls() {
+      const val = document.getElementById('galleryUrlsInput').value.trim();
+      if (!val) return alert('Isi URL gambar terlebih dahulu!');
+      const urlArray = val.split(',').map(item => item.trim()).filter(item => item.length > 0);
+      localStorage.setItem('ts_gallery_urls', JSON.stringify(urlArray));
+      document.getElementById('galleryStatus').innerText = '✓ Galeri foto berhasil disimpan!';
+    }
+
+    async function uploadGalleryCloudinary() {
+      const files = document.getElementById('galleryFileInput').files;
+      if (files.length === 0) return alert('Pilih minimal 1 file gambar!');
+
+      if (CLOUDINARY_CLOUD_NAME === "do4j9uw5r") {
+        alert('Fitur Upload File memerlukan konfigurasi Cloudinary. Masukkan Cloud Name dan Upload Preset Anda pada script admin.html!');
+        return;
+      }
+
+      document.getElementById('galleryStatus').innerText = `Mengupload ${files.length} foto ke cloud...`;
+      try {
+        const uploadedUrls = [];
+        for (let i = 0; i < files.length; i++) {
+          const url = await uploadToCloudinary(files[i]);
+          uploadedUrls.push(url);
+        }
+        localStorage.setItem('ts_gallery_urls', JSON.stringify(uploadedUrls));
+        document.getElementById('galleryStatus').innerText = '✓ Semua foto galeri berhasil diupload dan diperbarui!';
+      } catch (err) {
+        alert('Gagal upload galeri: ' + err.message);
+      }
+    }
+
+    // --- HELPER FUNCTION: CLOUDINARY UPLOAD API ---
+    async function uploadToCloudinary(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) throw new Error('Cloudinary Upload Failed');
+      const data = await res.json();
+      return data.secure_url;
+    }
+
+    // Auto-fill form saat dibuka
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedMap = localStorage.getItem('ts_map_link');
+      if (savedMap) document.getElementById('mapInput').value = savedMap;
+      
+      const savedLogo = localStorage.getItem('ts_logo_url');
+      if (savedLogo) document.getElementById('logoUrlInput').value = savedLogo;
+
+      const savedHero = localStorage.getItem('ts_hero_url');
+      if (savedHero) document.getElementById('heroUrlInput').value = savedHero;
+
+      const savedGallery = JSON.parse(localStorage.getItem('ts_gallery_urls'));
+      if (savedGallery) document.getElementById('galleryUrlsInput').value = savedGallery.join(', ');
+    });
+  </script>
+</body>
+</html>
