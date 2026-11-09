@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - Tepi Sawah</title>
-  
+
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2E5A36">
@@ -20,13 +20,10 @@
       padding: 20px;
       max-width: 650px;
       margin: 0 auto;
-      padding-bottom: 80px; /* Ruang untuk popup PWA */
+      padding-bottom: 80px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      color: #2E5A36;
-    }
+    h2 { margin-bottom: 20px; color: #2E5A36; }
 
     .panel {
       background: #fff;
@@ -35,20 +32,9 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       margin-bottom: 20px;
     }
+    .panel h3 { font-size: 1.05rem; margin-bottom: 12px; color: #444; }
 
-    .panel h3 {
-      font-size: 1.05rem;
-      margin-bottom: 12px;
-      color: #444;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+    label { display: block; font-size: 0.85rem; color: #666; margin-bottom: 6px; font-weight: 600; }
 
     input[type="text"], input[type="file"], select {
       width: 100%;
@@ -72,93 +58,128 @@
       font-size: 0.95rem;
       transition: background 0.2s;
     }
+    button:hover { background-color: #234529; }
 
-    button:hover {
-      background-color: #234529;
+    .status-msg { margin-top: 10px; font-size: 0.85rem; color: #2E5A36; font-weight: 600; }
+
+    /* Photo Management / Preview Grid in Admin */
+    .admin-photo-preview {
+      display: flex; align-items: center; gap: 12px;
+      background: #f9fafb; padding: 10px; border-radius: 8px;
+      border: 1px solid #e5e7eb; margin-top: 10px; margin-bottom: 12px;
+    }
+    .admin-photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+    .admin-photo-info { flex: 1; font-size: 0.85rem; color: #4b5563; word-break: break-all; }
+
+    .btn-danger {
+      background-color: #dc2626 !important;
+      padding: 6px 12px !important;
+      width: auto !important;
+      font-size: 0.8rem !important;
+    }
+    .btn-danger:hover { background-color: #b91c1c !important; }
+
+    .btn-warning {
+      background-color: #d97706 !important;
+      padding: 6px 12px !important;
+      width: auto !important;
+      font-size: 0.8rem !important;
+    }
+    .btn-warning:hover { background-color: #b45309 !important; }
+
+    .gallery-preview-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px; margin-top: 10px; margin-bottom: 12px;
+    }
+    .gallery-preview-item {
+      position: relative; background: #f3f4f6; border-radius: 8px;
+      overflow: hidden; border: 1px solid #e5e7eb; aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gallery-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-preview-item button {
+      position: absolute; bottom: 4px; right: 4px; left: 4px;
+      padding: 4px !important; font-size: 0.7rem !important;
     }
 
-    .divider {
-      text-align: center;
-      margin: 12px 0;
-      color: #aaa;
-      font-size: 0.8rem;
-      position: relative;
+    .product-list-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #f9fafb; padding: 10px 12px; border-radius: 8px;
+      border: 1px solid #e5e7eb; margin-bottom: 8px; gap: 10px;
     }
+    .product-list-thumb {
+      width: 44px; height: 44px; border-radius: 6px; overflow: hidden;
+      background: #e5e7eb; flex-shrink: 0;
+    }
+    .product-list-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { flex: 1; font-size: 0.9rem; min-width: 0; }
+    .product-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
-    .status-msg {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #2E5A36;
-      font-weight: 600;
+    /* ============================================================
+       PRATINJAU SEMUA FOTO TERUPLOAD (panel paling bawah)
+       ============================================================ */
+    .all-photo-item {
+      display: flex; gap: 12px; padding: 10px;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 8px; margin-bottom: 8px; align-items: flex-start;
+    }
+    .all-photo-thumb {
+      width: 72px; height: 72px; flex-shrink: 0;
+      border-radius: 6px; overflow: hidden; background: #e5e7eb;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .all-photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .all-photo-details {
+      flex: 1; min-width: 0; font-size: 0.8rem; color: #4b5563;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .all-photo-details strong { display: block; color: #111827; font-size: 0.85rem; }
+    .all-photo-type {
+      display: inline-block; background: #d1e7d4; color: #2E5A36;
+      padding: 1px 8px; border-radius: 4px; font-size: 0.7rem;
+      font-weight: 700; margin-bottom: 2px; align-self: flex-start;
+    }
+    .all-photo-dims { font-size: 0.72rem; color: #6b7280; }
+    .all-photo-url {
+      word-break: break-all; font-size: 0.7rem; color: #9ca3af;
+      font-family: monospace; max-height: 3em; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .all-photo-details .btn-danger {
+      align-self: flex-start; margin-top: 4px;
     }
 
     /* --- STYLING POPUP INSTALL PWA --- */
     #pwaInstallBanner {
       display: none;
       position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      max-width: 610px;
-      margin: 0 auto;
-      background: #2E5A36;
-      color: #fff;
-      padding: 16px 20px;
-      border-radius: 14px;
+      bottom: 20px; left: 20px; right: 20px;
+      max-width: 610px; margin: 0 auto;
+      background: #2E5A36; color: #fff;
+      padding: 16px 20px; border-radius: 14px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.2);
       z-index: 9999;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
+      align-items: center; justify-content: space-between; gap: 15px;
       animation: slideUp 0.3s ease-out;
     }
-
     @keyframes slideUp {
       from { transform: translateY(100px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-
-    .pwa-text h4 {
-      margin: 0 0 4px 0;
-      font-size: 1rem;
-    }
-
-    .pwa-text p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: #d1e7d4;
-    }
-
-    .pwa-actions {
-      display: flex;
-      gap: 8px;
-    }
-
+    .pwa-text h4 { margin: 0 0 4px 0; font-size: 1rem; }
+    .pwa-text p { margin: 0; font-size: 0.8rem; color: #d1e7d4; }
+    .pwa-actions { display: flex; gap: 8px; }
     .pwa-actions button {
-      width: auto;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      border-radius: 6px;
+      width: auto; padding: 8px 14px; font-size: 0.85rem; border-radius: 6px;
     }
-
-    #btnInstall {
-      background-color: #fff;
-      color: #2E5A36;
-    }
-
-    #btnInstall:hover {
-      background-color: #e2e8f0;
-    }
-
+    #btnInstall { background-color: #fff; color: #2E5A36; }
+    #btnInstall:hover { background-color: #e2e8f0; }
     #btnCloseInstall {
       background-color: transparent;
       border: 1px solid rgba(255,255,255,0.4);
       color: #fff;
     }
-
-    #btnCloseInstall:hover {
-      background-color: rgba(255,255,255,0.1);
-    }
+    #btnCloseInstall:hover { background-color: rgba(255,255,255,0.1); }
   </style>
 </head>
 <body>
@@ -174,54 +195,41 @@
     <div id="mapStatus" class="status-msg"></div>
   </div>
 
-  <!-- KONTROL 2: UPLOAD LOGO -->
+  <!-- KONTROL 2: UPLOAD LOGO (hanya file upload, tanpa input URL) -->
   <div class="panel">
     <h3>2. Ubah Logo Website</h3>
-    <label>Pilihan A: Pakai Link URL Gambar Logo</label>
-    <input type="text" id="logoUrlInput" placeholder="https://domain.com/logo.png">
-    <button onclick="saveLogoUrl()">Gunakan URL Logo Ini</button>
-    
-    <div class="divider">ATAU UPLOAD GAMBAR BARU</div>
-    
-    <label>Pilihan B: Upload File Gambar Logo (via Cloudinary)</label>
+    <label>Upload File Gambar Logo (via Cloudinary)</label>
     <input type="file" id="logoFileInput" accept="image/*">
-    <button onclick="uploadLogoCloudinary()">Upload File Logo</button>
+    <button onclick="uploadLogoCloudinary()">Upload & Ganti Logo</button>
+    <div id="logoPreviewContainer"></div>
     <div id="logoStatus" class="status-msg"></div>
   </div>
 
-  <!-- KONTROL 3: UPLOAD FOTO UTAMA (HERO) -->
+  <!-- KONTROL 3: UPLOAD FOTO UTAMA (HERO) — hanya file upload -->
   <div class="panel">
     <h3>3. Ubah Foto Utama (Hero)</h3>
-    <label>Pilihan A: Pakai Link URL Foto Utama</label>
-    <input type="text" id="heroUrlInput" placeholder="https://domain.com/hero.jpg">
-    <button onclick="saveHeroUrl()">Gunakan URL Foto Utama Ini</button>
-    
-    <div class="divider">ATAU UPLOAD GAMBAR BARU</div>
-    
-    <label>Pilihan B: Upload File Foto Utama (via Cloudinary)</label>
+    <label>Upload File Foto Utama (via Cloudinary)</label>
     <input type="file" id="heroFileInput" accept="image/*">
-    <button onclick="uploadHeroCloudinary()">Upload File Foto Utama</button>
+    <button onclick="uploadHeroCloudinary()">Upload & Ganti Foto Utama</button>
+    <div id="heroPreviewContainer"></div>
     <div id="heroStatus" class="status-msg"></div>
   </div>
 
-  <!-- KONTROL 4: UPLOAD GALERI SUASANA -->
+  <!-- KONTROL 4: UPLOAD GALERI SUASANA — hanya file upload -->
   <div class="panel">
     <h3>4. Kelola Galeri Suasana (Slider)</h3>
-    <label>Pilihan A: Input Banyak Link URL (Pisahkan dengan Koma)</label>
-    <input type="text" id="galleryUrlsInput" placeholder="https://img1.jpg, https://img2.jpg">
-    <button onclick="saveGalleryUrls()">Simpan Daftar Link Foto</button>
-    
-    <div class="divider">ATAU UPLOAD BEBERAPA FOTO SEKALIGUS</div>
-
-    <label>Pilihan B: Upload Banyak File Foto (via Cloudinary)</label>
+    <label>Upload Banyak File Foto (via Cloudinary)</label>
     <input type="file" id="galleryFileInput" accept="image/*" multiple>
-    <button onclick="uploadGalleryCloudinary()">Upload Semua Foto ke Cloud</button>
+    <button onclick="uploadGalleryCloudinary()">Upload Foto ke Galeri</button>
+    <div id="galleryPreviewContainer"></div>
     <div id="galleryStatus" class="status-msg"></div>
   </div>
 
   <!-- KONTROL 5: TAMBAH / UPDATE MENU PRODUK -->
   <div class="panel">
-    <h3>5. Tambah Produk Menu Baru</h3>
+    <h3 id="menuFormTitle">5. Tambah Produk Menu Baru</h3>
+    <input type="hidden" id="editProductId" value="">
+
     <label for="menuCategorySelect">Kategori Menu</label>
     <select id="menuCategorySelect">
       <option value="minuman">Minuman</option>
@@ -235,24 +243,31 @@
     <label for="menuPriceInput">Harga Produk</label>
     <input type="text" id="menuPriceInput" placeholder="Contoh: Rp 18.000">
 
-    <label for="menuUrlInput">Pilihan A: Link URL Foto Menu</label>
-    <input type="text" id="menuUrlInput" placeholder="https://domain.com/menu.jpg">
-
-    <div class="divider">ATAU UPLOAD FOTO MENU</div>
-
-    <label for="menuFileInput">Pilihan B: Upload File Foto Menu (via Cloudinary)</label>
+    <label for="menuFileInput">Upload File Foto Menu (Opsional via Cloudinary)</label>
     <input type="file" id="menuFileInput" accept="image/*">
 
-    <button onclick="saveMenuItem()">Tambah Menu Produk</button>
+    <button id="menuSubmitBtn" onclick="saveMenuItem()">Tambah Menu Produk</button>
+    <button id="menuCancelEditBtn" style="background-color: #6b7280; margin-top: 6px; display:none;" onclick="cancelEditMenu()">Batal Edit</button>
     <div id="menuStatus" class="status-msg"></div>
+
+    <h3 style="margin-top:24px;">Daftar Produk Menu Saat Ini</h3>
+    <div id="productListContainer"></div>
   </div>
 
-  <!-- KONTROL 6: PENGATURAN CACHE FLEKSIBEL -->
+  <!-- KONTROL 6: PENGATURAN CACHE FLEKSIBEL & INSTALL APP -->
   <div class="panel">
-    <h3>6. Kontrol Cache PWA & Offline</h3>
+    <h3>6. Kontrol Cache PWA & Install Aplikasi</h3>
     <label>Kelola penyimpanan cache browser untuk pembaruan instan</label>
     <button style="background-color: #d97706; margin-bottom: 8px;" onclick="clearAppCache()">Bersihkan & Perbarui Cache Aplikasi</button>
+    <button style="background-color: #2563eb; margin-bottom: 8px;" onclick="manualInstallPWA()">Install Aplikasi ke Perangkat</button>
     <div id="cacheStatus" class="status-msg"></div>
+  </div>
+
+  <!-- KONTROL 7: PRATINJAU SEMUA FOTO TERUPLOAD (BARU) -->
+  <div class="panel">
+    <h3>7. Pratinjau Semua Foto Terupload</h3>
+    <label>Ringkasan seluruh foto yang tersimpan di perangkat ini beserta detailnya.</label>
+    <div id="allPhotosPreview"></div>
   </div>
 
   <!-- POPUP / BANNER INSTALL PWA -->
@@ -271,26 +286,21 @@
     // ========================================================
     // KONFIGURASI CLOUDINARY ANDA
     // ========================================================
-    const CLOUDINARY_CLOUD_NAME = "do4j9uw5r"; 
-    const CLOUDINARY_UPLOAD_PRESET = "swara_sawah"; 
+    const CLOUDINARY_CLOUD_NAME = "do4j9uw5r";
+    const CLOUDINARY_UPLOAD_PRESET = "swara_sawah";
 
-    // --- DEFAULT MENU STRUCTURE ---
-    const DEFAULT_MENU = [
-      { id:'minuman', name:'Minuman', items:[
-        { id:'min-1', name:'Kopi Susu Sawah', price:'Rp 18.000', photo:'' },
-        { id:'min-2', name:'Es Teh Serai', price:'Rp 12.000', photo:'' },
-        { id:'min-3', name:'Wedang Jahe Madu', price:'Rp 15.000', photo:'' }
-      ]},
-      { id:'ringan', name:'Makanan Ringan', items:[
-        { id:'ring-1', name:'Pisang Goreng Keju', price:'Rp 15.000', photo:'' },
-        { id:'ring-2', name:'Tahu Crispy Sambal Matah', price:'Rp 17.000', photo:'' },
-        { id:'ring-3', name:'Singkong Keju', price:'Rp 14.000', photo:'' }
-      ]},
-      { id:'berat', name:'Makanan Berat', items:[
-        { id:'berat-1', name:'Nasi Goreng Sawah', price:'Rp 25.000', photo:'' },
-        { id:'berat-2', name:'Mie Godog Jawa', price:'Rp 23.000', photo:'' }
-      ]}
-    ];
+    // ========================================================
+    // DEFAULT MENU (fix bug: sebelumnya variabel ini tidak didefinisikan
+    // sehingga panel produk blank dan opsi edit/hapus tidak muncul)
+    // ========================================================
+    const DEFAULT_MENU = [];
+
+    // Helper: refresh semua pratinjau (inline + panel 7)
+    function refreshAllPreviews() {
+      renderUploadedPhotos();
+      renderProductList();
+      renderAllPhotosPreview();
+    }
 
     // --- 1. LOGIKA LINK LOKASI ---
     function saveLocation() {
@@ -300,140 +310,379 @@
       document.getElementById('mapStatus').innerText = '✓ Link lokasi berhasil diperbarui!';
     }
 
-    // --- 2. LOGIKA LOGO ---
-    function saveLogoUrl() {
-      const val = document.getElementById('logoUrlInput').value.trim();
-      if (!val) return alert('URL logo tidak boleh kosong!');
-      localStorage.setItem('ts_logo_url', val);
-      document.getElementById('logoStatus').innerText = '✓ Logo berhasil diperbarui dari URL!';
-    }
-
+    // --- 2. LOGIKA LOGO (hanya via file upload) ---
     async function uploadLogoCloudinary() {
       const fileInput = document.getElementById('logoFileInput');
       if (!fileInput.files[0]) return alert('Pilih file gambar logo terlebih dahulu!');
-      
+
       document.getElementById('logoStatus').innerText = 'Mengupload logo ke cloud...';
       try {
         const url = await uploadToCloudinary(fileInput.files[0]);
         localStorage.setItem('ts_logo_url', url);
         document.getElementById('logoStatus').innerText = '✓ Logo berhasil diupload dan diperbarui!';
+        fileInput.value = '';
+        refreshAllPreviews();
       } catch (err) {
         alert('Gagal upload: ' + err.message);
       }
     }
 
-    // --- 3. LOGIKA FOTO UTAMA (HERO) ---
-    function saveHeroUrl() {
-      const val = document.getElementById('heroUrlInput').value.trim();
-      if (!val) return alert('URL foto utama tidak boleh kosong!');
-      localStorage.setItem('ts_hero_url', val);
-      document.getElementById('heroStatus').innerText = '✓ Foto utama berhasil diperbarui dari URL!';
+    function deleteLogo() {
+      if (confirm('Hapus logo ini?')) {
+        localStorage.removeItem('ts_logo_url');
+        refreshAllPreviews();
+      }
     }
 
+    // --- 3. LOGIKA FOTO UTAMA (HERO) ---
     async function uploadHeroCloudinary() {
       const fileInput = document.getElementById('heroFileInput');
       if (!fileInput.files[0]) return alert('Pilih file foto utama terlebih dahulu!');
-      
+
       document.getElementById('heroStatus').innerText = 'Mengupload foto utama ke cloud...';
       try {
         const url = await uploadToCloudinary(fileInput.files[0]);
         localStorage.setItem('ts_hero_url', url);
         document.getElementById('heroStatus').innerText = '✓ Foto utama berhasil diupload dan diperbarui!';
+        fileInput.value = '';
+        refreshAllPreviews();
       } catch (err) {
         alert('Gagal upload: ' + err.message);
       }
     }
 
-    // --- 4. LOGIKA GALERI SUASANA ---
-    function saveGalleryUrls() {
-      const val = document.getElementById('galleryUrlsInput').value.trim();
-      if (!val) return alert('Isi URL gambar terlebih dahulu!');
-      const urlArray = val.split(',').map(item => item.trim()).filter(item => item.length > 0);
-      localStorage.setItem('ts_gallery_urls', JSON.stringify(urlArray));
-      document.getElementById('galleryStatus').innerText = '✓ Galeri foto berhasil disimpan!';
+    function deleteHero() {
+      if (confirm('Hapus foto utama ini?')) {
+        localStorage.removeItem('ts_hero_url');
+        refreshAllPreviews();
+      }
     }
 
+    // --- 4. LOGIKA GALERI SUASANA ---
     async function uploadGalleryCloudinary() {
       const files = document.getElementById('galleryFileInput').files;
       if (files.length === 0) return alert('Pilih minimal 1 file gambar!');
 
       document.getElementById('galleryStatus').innerText = `Mengupload ${files.length} foto ke cloud...`;
       try {
-        const uploadedUrls = [];
+        let existingGallery = JSON.parse(localStorage.getItem('ts_gallery_urls')) || [];
         for (let i = 0; i < files.length; i++) {
           const url = await uploadToCloudinary(files[i]);
-          uploadedUrls.push(url);
+          existingGallery.push(url);
         }
-        localStorage.setItem('ts_gallery_urls', JSON.stringify(uploadedUrls));
-        document.getElementById('galleryStatus').innerText = '✓ Semua foto galeri berhasil diupload dan diperbarui!';
+        localStorage.setItem('ts_gallery_urls', JSON.stringify(existingGallery));
+        document.getElementById('galleryStatus').innerText = '✓ Semua foto galeri berhasil ditambahkan!';
+        document.getElementById('galleryFileInput').value = '';
+        refreshAllPreviews();
       } catch (err) {
         alert('Gagal upload galeri: ' + err.message);
       }
     }
 
-    // --- 5. LOGIKA MENU PRODUK ---
+    function deleteGalleryPhoto(index) {
+      if (confirm('Hapus foto galeri ini?')) {
+        let gallery = JSON.parse(localStorage.getItem('ts_gallery_urls')) || [];
+        gallery.splice(index, 1);
+        localStorage.setItem('ts_gallery_urls', JSON.stringify(gallery));
+        refreshAllPreviews();
+      }
+    }
+
+    // Tampilkan pratinjau inline (per bagian) yang diupload beserta opsi hapus
+    function renderUploadedPhotos() {
+      // Logo Preview
+      const logoUrl = localStorage.getItem('ts_logo_url');
+      const logoContainer = document.getElementById('logoPreviewContainer');
+      if (logoUrl) {
+        logoContainer.innerHTML = `
+          <div class="admin-photo-preview">
+            <img src="${logoUrl}" alt="Logo">
+            <div class="admin-photo-info">Logo Aktif</div>
+            <button class="btn-danger" onclick="deleteLogo()">Hapus</button>
+          </div>`;
+      } else { logoContainer.innerHTML = ''; }
+
+      // Hero Preview
+      const heroUrl = localStorage.getItem('ts_hero_url');
+      const heroContainer = document.getElementById('heroPreviewContainer');
+      if (heroUrl) {
+        heroContainer.innerHTML = `
+          <div class="admin-photo-preview">
+            <img src="${heroUrl}" alt="Hero">
+            <div class="admin-photo-info">Foto Utama Aktif</div>
+            <button class="btn-danger" onclick="deleteHero()">Hapus</button>
+          </div>`;
+      } else { heroContainer.innerHTML = ''; }
+
+      // Gallery Preview
+      const galleryUrls = JSON.parse(localStorage.getItem('ts_gallery_urls')) || [];
+      const galleryContainer = document.getElementById('galleryPreviewContainer');
+      if (galleryUrls.length > 0) {
+        galleryContainer.innerHTML = `<label>Foto Galeri Tersimpan (${galleryUrls.length}):</label><div class="gallery-preview-grid">` +
+          galleryUrls.map((url, idx) => `
+            <div class="gallery-preview-item">
+              <img src="${url}" alt="Galeri ${idx+1}">
+              <button class="btn-danger" onclick="deleteGalleryPhoto(${idx})">Hapus</button>
+            </div>
+          `).join('') + `</div>`;
+      } else {
+        galleryContainer.innerHTML = `<p style="font-size:0.8rem; color:#888; margin-top:8px;">Belum ada foto galeri yang diupload.</p>`;
+      }
+    }
+
+    // ============================================================
+    // PRATINJAU SEMUA FOTO TERUPLOAD (panel 7 paling bawah)
+    // Menampilkan: thumbnail, tipe, label, dimensi, URL, tombol hapus
+    // ============================================================
+    function renderAllPhotosPreview() {
+      const container = document.getElementById('allPhotosPreview');
+      if (!container) return;
+
+      const photos = [];
+
+      const logoUrl = localStorage.getItem('ts_logo_url');
+      if (logoUrl) photos.push({ type: 'Logo', label: 'Logo Website', url: logoUrl, onDelete: 'deleteLogo()' });
+
+      const heroUrl = localStorage.getItem('ts_hero_url');
+      if (heroUrl) photos.push({ type: 'Hero', label: 'Foto Utama (Hero)', url: heroUrl, onDelete: 'deleteHero()' });
+
+      const galleryUrls = JSON.parse(localStorage.getItem('ts_gallery_urls')) || [];
+      galleryUrls.forEach((url, i) => {
+        photos.push({
+          type: 'Galeri',
+          label: `Foto Galeri #${i + 1}`,
+          url,
+          onDelete: `deleteGalleryPhoto(${i})`
+        });
+      });
+
+      const menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+      menuData.forEach(cat => {
+        cat.items.forEach(item => {
+          if (item.photo) {
+            photos.push({
+              type: 'Menu',
+              label: `${cat.name} — ${item.name}`,
+              url: item.photo,
+              onDelete: `removeMenuPhoto('${item.id}')`
+            });
+          }
+        });
+      });
+
+      if (photos.length === 0) {
+        container.innerHTML = `<p style="font-size:0.85rem; color:#888;">Belum ada foto yang diupload.</p>`;
+        return;
+      }
+
+      container.innerHTML = `<label>Total foto terupload: <strong>${photos.length}</strong></label>` +
+        photos.map((p, i) => `
+          <div class="all-photo-item">
+            <div class="all-photo-thumb">
+              <img src="${p.url}" alt="${p.label}" loading="lazy" data-idx="${i}">
+            </div>
+            <div class="all-photo-details">
+              <span class="all-photo-type">${p.type}</span>
+              <strong>${p.label}</strong>
+              <span class="all-photo-dims" data-dims-idx="${i}">Memuat dimensi...</span>
+              <span class="all-photo-url">${p.url}</span>
+              <button class="btn-danger" onclick="${p.onDelete}">Hapus Foto</button>
+            </div>
+          </div>
+        `).join('');
+
+      // Isi dimensi gambar setelah gambar ter-load
+      container.querySelectorAll('.all-photo-thumb img').forEach(img => {
+        const idx = img.dataset.idx;
+        const dimsEl = container.querySelector(`[data-dims-idx="${idx}"]`);
+        const updateDims = () => {
+          if (dimsEl && img.naturalWidth) {
+            dimsEl.textContent = `Dimensi: ${img.naturalWidth} × ${img.naturalHeight} px`;
+          }
+        };
+        if (img.complete) updateDims();
+        else img.addEventListener('load', updateDims, { once: true });
+      });
+    }
+
+    // Hapus foto menu dari produk tertentu
+    function removeMenuPhoto(prodId) {
+      if (!confirm('Hapus foto produk ini?')) return;
+      let menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+      menuData.forEach(cat => {
+        cat.items.forEach(item => {
+          if (item.id === prodId) item.photo = '';
+        });
+      });
+      localStorage.setItem('ts_menu', JSON.stringify(menuData));
+      refreshAllPreviews();
+    }
+
+    // --- 5. LOGIKA MENU PRODUK (TAMBAH, EDIT, HAPUS) ---
     async function saveMenuItem() {
+      const editId = document.getElementById('editProductId').value;
       const catId = document.getElementById('menuCategorySelect').value;
       const name = document.getElementById('menuNameInput').value.trim();
       const price = document.getElementById('menuPriceInput').value.trim();
-      const photoUrl = document.getElementById('menuUrlInput').value.trim();
       const fileInput = document.getElementById('menuFileInput');
 
       if (!name || !price) {
         return alert('Nama menu dan harga produk wajib diisi!');
       }
 
-      let finalPhoto = photoUrl;
       const statusEl = document.getElementById('menuStatus');
+      let menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
 
-      if (!finalPhoto && fileInput.files[0]) {
+      let photoUrl = '';
+      if (fileInput.files[0]) {
         statusEl.innerText = 'Mengupload foto produk ke cloud...';
         try {
-          finalPhoto = await uploadToCloudinary(fileInput.files[0]);
+          photoUrl = await uploadToCloudinary(fileInput.files[0]);
         } catch (err) {
           return alert('Gagal upload foto menu: ' + err.message);
         }
       }
 
-      let menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
-      let targetCat = menuData.find(c => c.id === catId);
+      if (editId) {
+        // Mode Edit: cari produk dan perbarui
+        let found = false;
+        menuData.forEach(cat => {
+          cat.items.forEach(item => {
+            if (item.id === editId) {
+              item.name = name;
+              item.price = price;
+              if (photoUrl) item.photo = photoUrl;
+              if (cat.id !== catId) {
+                cat.items = cat.items.filter(i => i.id !== editId);
+                let targetCat = menuData.find(c => c.id === catId);
+                if (!targetCat) {
+                  targetCat = { id: catId, name: catId.charAt(0).toUpperCase() + catId.slice(1), items: [] };
+                  menuData.push(targetCat);
+                }
+                targetCat.items.push(item);
+              }
+              found = true;
+            }
+          });
+        });
+        statusEl.innerText = '✓ Produk menu berhasil diperbarui!';
+        cancelEditMenu();
+      } else {
+        // Mode Tambah Baru
+        let targetCat = menuData.find(c => c.id === catId);
+        if (!targetCat) {
+          targetCat = { id: catId, name: catId.charAt(0).toUpperCase() + catId.slice(1), items: [] };
+          menuData.push(targetCat);
+        }
 
-      if (!targetCat) {
-        targetCat = { id: catId, name: catId.charAt(0).toUpperCase() + catId.slice(1), items: [] };
-        menuData.push(targetCat);
+        const newItem = {
+          id: 'prod-' + Date.now(),
+          name: name,
+          price: price,
+          photo: photoUrl || ''
+        };
+
+        targetCat.items.push(newItem);
+        statusEl.innerText = '✓ Produk menu berhasil ditambahkan!';
+        document.getElementById('menuNameInput').value = '';
+        document.getElementById('menuPriceInput').value = '';
+        fileInput.value = '';
       }
 
-      const newItem = {
-        id: 'prod-' + Date.now(),
-        name: name,
-        price: price,
-        photo: finalPhoto || ''
-      };
-
-      targetCat.items.push(newItem);
       localStorage.setItem('ts_menu', JSON.stringify(menuData));
-      
-      statusEl.innerText = '✓ Produk menu berhasil ditambahkan!';
-      document.getElementById('menuNameInput').value = '';
-      document.getElementById('menuPriceInput').value = '';
-      document.getElementById('menuUrlInput').value = '';
-      fileInput.value = '';
+      refreshAllPreviews();
     }
 
-    // --- 6. LOGIKA KONTROL CACHE FLEKSIBEL ---
+    function renderProductList() {
+      const menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+      const container = document.getElementById('productListContainer');
+
+      let html = '';
+      menuData.forEach(cat => {
+        html += `<h4 style="margin: 12px 0 6px 0; color: #2E5A36; font-size:0.95rem;">${cat.name}</h4>`;
+        if (cat.items.length === 0) {
+          html += `<p style="font-size:0.8rem; color:#888; margin-bottom:8px;">Belum ada produk di kategori ini.</p>`;
+        }
+        cat.items.forEach(item => {
+          html += `
+            <div class="product-list-item">
+              <div class="product-list-thumb">
+                ${item.photo
+                  ? `<img src="${item.photo}" alt="${item.name}">`
+                  : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#9ca3af;">No Img</div>`}
+              </div>
+              <div class="product-info">
+                <strong>${item.name}</strong><br>(${item.price})
+              </div>
+              <div class="product-actions">
+                <button class="btn-warning" onclick="startEditMenu('${cat.id}', '${item.id}')">Edit</button>
+                <button class="btn-danger" onclick="deleteMenuProduct('${item.id}')">Hapus</button>
+              </div>
+            </div>`;
+        });
+      });
+      container.innerHTML = html;
+    }
+
+    function startEditMenu(catId, prodId) {
+      const menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+      let targetItem = null;
+      menuData.forEach(cat => {
+        cat.items.forEach(item => {
+          if (item.id === prodId) targetItem = item;
+        });
+      });
+
+      if (!targetItem) return;
+
+      document.getElementById('editProductId').value = targetItem.id;
+      document.getElementById('menuCategorySelect').value = catId;
+      document.getElementById('menuNameInput').value = targetItem.name;
+      document.getElementById('menuPriceInput').value = targetItem.price;
+      document.getElementById('menuFormTitle').innerText = 'Edit Produk Menu';
+      document.getElementById('menuSubmitBtn').innerText = 'Simpan Perubahan Produk';
+      document.getElementById('menuCancelEditBtn').style.display = 'block';
+
+      // Scroll ke form (pakai scrollIntoView agar akurat)
+      document.getElementById('menuFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function cancelEditMenu() {
+      document.getElementById('editProductId').value = '';
+      document.getElementById('menuNameInput').value = '';
+      document.getElementById('menuPriceInput').value = '';
+      document.getElementById('menuFileInput').value = '';
+      document.getElementById('menuFormTitle').innerText = '5. Tambah Produk Menu Baru';
+      document.getElementById('menuSubmitBtn').innerText = 'Tambah Menu Produk';
+      document.getElementById('menuCancelEditBtn').style.display = 'none';
+      document.getElementById('menuStatus').innerText = '';
+    }
+
+    function deleteMenuProduct(prodId) {
+      if (confirm('Hapus produk menu ini?')) {
+        let menuData = JSON.parse(localStorage.getItem('ts_menu')) || DEFAULT_MENU;
+        menuData.forEach(cat => {
+          cat.items = cat.items.filter(item => item.id !== prodId);
+        });
+        localStorage.setItem('ts_menu', JSON.stringify(menuData));
+        refreshAllPreviews();
+      }
+    }
+
+    // --- 6. KONTROL CACHE FLEKSIBEL ---
     async function clearAppCache() {
       if ('caches' in window) {
         try {
           const cacheKeys = await caches.keys();
           await Promise.all(cacheKeys.map(key => caches.delete(key)));
-          
+
           if ('serviceWorker' in navigator) {
             const registrations = await navigator.serviceWorker.getRegistrations();
             for (let registration of registrations) {
               await registration.unregister();
             }
           }
-          
+
           document.getElementById('cacheStatus').innerText = '✓ Cache berhasil dibersihkan! Halaman akan dimuat ulang...';
           setTimeout(() => {
             window.location.reload();
@@ -446,7 +695,7 @@
       }
     }
 
-    // --- HELPER FUNCTION: CLOUDINARY UPLOAD API ---
+    // --- HELPER: CLOUDINARY UPLOAD API ---
     async function uploadToCloudinary(file) {
       const formData = new FormData();
       formData.append('file', file);
@@ -466,19 +715,24 @@
     document.addEventListener('DOMContentLoaded', () => {
       const savedMap = localStorage.getItem('ts_map_link');
       if (savedMap) document.getElementById('mapInput').value = savedMap;
-      
-      const savedLogo = localStorage.getItem('ts_logo_url');
-      if (savedLogo) document.getElementById('logoUrlInput').value = savedLogo;
 
-      const savedHero = localStorage.getItem('ts_hero_url');
-      if (savedHero) document.getElementById('heroUrlInput').value = savedHero;
-
-      const savedGallery = JSON.parse(localStorage.getItem('ts_gallery_urls'));
-      if (savedGallery) document.getElementById('galleryUrlsInput').value = savedGallery.join(', ');
+      refreshAllPreviews();
     });
 
-    // --- PWA SERVICE WORKER REGISTRATION & INSTALL POPUP LOGIC ---
-    let deferredPrompt;
+    // ============================================================
+    // PWA SERVICE WORKER REGISTRATION & INSTALL LOGIC
+    // (Diperbaiki: deteksi dini HTTPS/localhost, appinstalled handler,
+    //  pesan fallback manual yang lebih jelas)
+    // ============================================================
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                      || window.navigator.standalone === true;
+    const isSecureContext = window.isSecureContext
+                         || location.protocol === 'https:'
+                         || location.hostname === 'localhost'
+                         || location.hostname === '127.0.0.1';
+
+    let deferredPrompt = null;
+    let isAppInstalled = isStandalone;
     const installBanner = document.getElementById('pwaInstallBanner');
     const btnInstall = document.getElementById('btnInstall');
     const btnCloseInstall = document.getElementById('btnCloseInstall');
@@ -491,21 +745,65 @@
       });
     }
 
+    // Event `beforeinstallprompt` hanya fire pada HTTPS/localhost
+    // dan saat kriteria PWA terpenuhi (manifest + ikon + SW aktif).
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      installBanner.style.display = 'flex';
+      if (!isAppInstalled) {
+        installBanner.style.display = 'flex';
+      }
     });
+
+    // Deteksi kalau aplikasi sudah berhasil diinstall
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA berhasil diinstall.');
+      isAppInstalled = true;
+      deferredPrompt = null;
+      installBanner.style.display = 'none';
+    });
+
+    function manualInstallPWA() {
+      if (isAppInstalled) {
+        alert('Aplikasi sudah terinstall di perangkat Anda.');
+        return;
+      }
+      if (!isSecureContext) {
+        alert(
+          'Install aplikasi memerlukan HTTPS atau localhost.\n\n' +
+          'Saat ini Anda mengakses: ' + location.protocol + '//' + location.hostname + '\n\n' +
+          'Silakan akses lewat domain HTTPS atau localhost untuk mendapatkan fitur install.'
+        );
+        return;
+      }
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Pengguna menerima instalasi PWA');
+          }
+          deferredPrompt = null;
+          installBanner.style.display = 'none';
+        });
+      } else {
+        alert(
+          'Untuk install aplikasi:\n\n' +
+          '• Chrome/Edge (Android/Desktop): menu ⋮ → "Install app" atau "Add to Home Screen"\n' +
+          '• Safari (iOS): tombol Share → "Add to Home Screen"\n\n' +
+          'Catatan: Jika tombol install otomatis belum muncul, kemungkinan aplikasi sudah terinstall atau browser belum selesai memverifikasi manifest.'
+        );
+      }
+    }
 
     btnInstall.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('Pengguna menerima instalasi PWA');
-        }
+        if (outcome === 'accepted') console.log('Pengguna menerima instalasi PWA');
         deferredPrompt = null;
         installBanner.style.display = 'none';
+      } else {
+        manualInstallPWA();
       }
     });
 

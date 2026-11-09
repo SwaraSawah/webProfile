@@ -58,7 +58,25 @@
   .tsk-hero-text h1{ font-size:48px; line-height:1.15; color:var(--text); }
   .tsk-hero-text p{ font-size:17px; line-height:1.6; color:var(--text-muted); margin:0; }
   .tsk-cta{ border:1.5px solid var(--accent); color:var(--accent); padding:14px 28px; border-radius:999px; font-weight:600; font-size:15px; display:inline-block; width:fit-content; }
-  .tsk-hero-photo{ flex:1 1 420px; min-width:280px; aspect-ratio:4/3; border-radius:16px; border:1px dashed var(--ph-border); overflow:hidden; }
+
+  /* =========================================================
+     KONTAINER FOTO: Potret (Portrait) di HP & Tablet,
+     Lanskap (Landscape) di Desktop saja (>= 1025px).
+     ========================================================= */
+  .tsk-hero-photo,
+  .tsk-gallery-container,
+  .tsk-menu-photo,
+  .tsk-map {
+    aspect-ratio: 3 / 4; /* Portrait default (mobile & tablet) */
+  }
+  @media (min-width: 1025px) {
+    .tsk-hero-photo      { aspect-ratio: 4 / 3; }   /* Landscape */
+    .tsk-gallery-container { aspect-ratio: 16 / 10; } /* Landscape */
+    .tsk-menu-photo      { aspect-ratio: 4 / 3; }   /* Landscape */
+    .tsk-map             { aspect-ratio: 16 / 10; } /* Landscape */
+  }
+
+  .tsk-hero-photo{ flex:1 1 420px; min-width:280px; border-radius:16px; border:1px dashed var(--ph-border); overflow:hidden; }
 
   .tsk-value-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; }
   .tsk-value-card{ background:var(--bg); border-radius:14px; padding:28px 24px; display:flex; flex-direction:column; gap:14px; }
@@ -71,7 +89,6 @@
     width: 100%;
     max-width: 680px;
     margin: 0 auto;
-    aspect-ratio: 16/10;
     border-radius: 16px;
     overflow: hidden;
     background: var(--bg-alt);
@@ -108,8 +125,8 @@
   .tsk-menu-toggle .tsk-right{ display:flex; align-items:center; gap:14px; }
   .tsk-menu-toggle .tsk-price{ font-weight:600; font-size:14px; color:var(--accent-2); }
   .tsk-menu-toggle .tsk-icon{ font-size:18px; color:var(--accent); width:16px; text-align:center; }
-  
-  .tsk-menu-photo{ width:100%; max-width:260px; aspect-ratio:4/3; border-radius:12px; overflow:hidden; margin:0 auto 16px auto; display:none; justify-content:center; align-items:center; }
+
+  .tsk-menu-photo{ width:100%; max-width:320px; border-radius:12px; overflow:hidden; margin:8px auto 16px auto; display:none; justify-content:center; align-items:center; }
   .tsk-menu-item.open .tsk-menu-photo{ display:flex; }
 
   .tsk-lokasi{ display:flex; flex-wrap:wrap; gap:40px; }
@@ -117,19 +134,63 @@
   .tsk-lokasi-text h2{ font-size:28px; }
   .tsk-lokasi-text p{ margin:0; font-size:15px; color:var(--text-muted); line-height:1.7; }
   .tsk-hubungi{ margin-top:8px; align-self:flex-start; background:var(--accent); color:var(--bg); padding:12px 26px; border-radius:999px; font-weight:600; font-size:14px; }
-  .tsk-map{ flex:1 1 320px; min-width:280px; aspect-ratio:16/10; border-radius:14px; border:1px dashed var(--ph-border); overflow:hidden; }
+  .tsk-map{ flex:1 1 320px; min-width:280px; border-radius:14px; border:1px dashed var(--ph-border); overflow:hidden; }
 
   .tsk-footer{ padding:24px 48px; border-top:1px solid var(--border); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
   .tsk-footer small{ font-size:13px; color:var(--ph-text); }
   .tsk-footer-links{ display:flex; gap:16px; align-items:center; }
   .tsk-footer-links a{ font-size:13px; color:var(--text-muted); }
 
-  .tsk-modal-overlay{ position:fixed; inset:0; background:rgba(42,42,32,.75); z-index:50; display:none; align-items:center; justify-content:center; padding:24px; }
+  /* =========================================================
+     MODAL PREVIEW — Natural Size (sesuai foto upload) + 3D
+     ========================================================= */
+  .tsk-modal-overlay{
+    position:fixed; inset:0; background:rgba(42,42,32,.78); z-index:50;
+    display:none; align-items:center; justify-content:center; padding:20px;
+    perspective: 1200px;
+  }
   .tsk-modal-overlay.show{ display:flex; }
-  .tsk-modal-card{ background:var(--bg); border-radius:16px; padding:28px; max-width:460px; width:100%; max-height:85vh; overflow-y:auto; animation:tsk-pop .22s ease; display:flex; flex-direction:column; align-items:center; }
+  .tsk-modal-card{
+    background:var(--bg); border-radius:16px; padding:22px;
+    max-width:min(92vw, 900px); width:auto;
+    max-height:90vh; overflow-y:auto;
+    animation:tsk-pop .28s ease;
+    display:flex; flex-direction:column; align-items:center;
+    transform-style: preserve-3d;
+  }
   @keyframes tsk-pop{ from{ transform:scale(.92); opacity:0; } to{ transform:scale(1); opacity:1; } }
-  .tsk-modal-photo{ width:100%; aspect-ratio:4/3; border-radius:12px; margin-bottom:16px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+
+  /* Pratinjau foto mengikuti ukuran asli upload, tapi dibatasi viewport */
+  .tsk-modal-photo{
+    border-radius:12px; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center;
+    max-width:100%; max-height:70vh;
+  }
+  .tsk-modal-photo img{
+    max-width:90vw; max-height:70vh; width:auto; height:auto;
+    object-fit:contain; display:block; border-radius:12px;
+    box-shadow:
+      -10px 15px 35px -10px rgba(42,42,32,.40),
+      0 0 0 1px rgba(42,42,32,.05);
+    transform: perspective(1000px) rotateX(3deg) rotateY(-3deg);
+    transition: transform .5s ease, box-shadow .5s ease;
+    transform-style: preserve-3d;
+  }
+  .tsk-modal-photo img:hover{
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.01);
+    box-shadow: 0 25px 50px -15px rgba(42,42,32,.55);
+  }
+
   .tsk-btn{ border:none; padding:10px 24px; border-radius:999px; font-weight:600; cursor:pointer; font-size:14px; background:var(--accent); color:var(--bg); }
+
+  /* Placeholder link-out untuk short link Google Maps yang tidak bisa di-embed */
+  .tsk-map-fallback{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    background:var(--ph-bg); color:var(--ph-text); text-align:center; padding:16px;
+    transition: background .25s ease;
+  }
+  .tsk-map-fallback:hover{ background:#dfe7cd; }
+  .tsk-map-fallback svg{ color:var(--accent); }
 </style>
 </head>
 <body>
@@ -224,23 +285,13 @@
   </div>
 
 <script>
-const DEFAULT_MENU = [
-  { id:'minuman', name:'Minuman', items:[
-    { id:'min-1', name:'Kopi Susu Sawah', price:'Rp 18.000', photo:'' },
-    { id:'min-2', name:'Es Teh Serai', price:'Rp 12.000', photo:'' },
-    { id:'min-3', name:'Wedang Jahe Madu', price:'Rp 15.000', photo:'' }
-  ]},
-  { id:'ringan', name:'Makanan Ringan', items:[
-    { id:'ring-1', name:'Pisang Goreng Keju', price:'Rp 15.000', photo:'' },
-    { id:'ring-2', name:'Tahu Crispy Sambal Matah', price:'Rp 17.000', photo:'' },
-    { id:'ring-3', name:'Singkong Keju', price:'Rp 14.000', photo:'' }
-  ]},
-  { id:'berat', name:'Makanan Berat', items:[
-    { id:'berat-1', name:'Nasi Goreng Sawah', price:'Rp 25.000', photo:'' },
-    { id:'berat-2', name:'Mie Godog Jawa', price:'Rp 23.000', photo:'' }
-  ]}
-];
 const DEFAULT_GALLERY_COUNT = 10;
+
+// ========================================================
+// DEFAULT MENU (fix bug: sebelumnya referensi ke DEFAULT_MENU
+// tanpa deklarasi -> menyebabkan menu tidak tampil sama sekali)
+// ========================================================
+const DEFAULT_MENU = [];
 
 function getStr(key, fallback){
   try{ const v = localStorage.getItem(key); return (v && v.trim()) ? v : fallback; }
@@ -255,12 +306,12 @@ function escapeHtml(str){
 }
 
 const DATA = {
-  logo: getStr('ts_logo_url', ''),
-  hero: getStr('ts_hero_url', ''),
+  logo:    getStr('ts_logo_url', ''),
+  hero:    getStr('ts_hero_url', ''),
   gallery: getJSON('ts_gallery_urls', []),
-  menu: getJSON('ts_menu', DEFAULT_MENU),
+  menu:    getJSON('ts_menu', DEFAULT_MENU),
   address: getStr('ts_address', '[Alamat Lokasi]'),
-  hours: getStr('ts_hours', '08.00 – 21.00 WIB'),
+  hours:   getStr('ts_hours', '08.00 – 21.00 WIB'),
   mapLink: getStr('ts_map_link', '')
 };
 
@@ -269,7 +320,7 @@ function openPreview(src, label){
   if (src) {
     photoEl.innerHTML = `<img src="${src}" alt="${escapeHtml(label||'')}">`;
   } else {
-    photoEl.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;">${escapeHtml(label||'Foto')}</div>`;
+    photoEl.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;min-height:180px;">${escapeHtml(label||'Foto')}</div>`;
   }
   document.getElementById('modalOverlay').classList.add('show');
 }
@@ -308,7 +359,7 @@ function renderGallery(){
   ).join('');
 
   const slides = track.querySelectorAll('.tsk-photo');
-  
+
   slides.forEach((child, i) => {
     const it = items[i];
     child.addEventListener('click', () => openPreview(it.url, it.label));
@@ -400,14 +451,80 @@ function renderMenu(){
   });
 }
 
+// ========================================================
+// PARSING LINK GOOGLE MAPS: otomatis ikut link yang diinput
+// Mendukung format: embed URL, @lat,lng, ?q=lat,lng, ?q=place,
+// /place/Nama/, dan koordinat mentah "lat,lng".
+// ========================================================
+function getMapEmbedUrl(mapLink){
+  if (!mapLink) return null;
+  const link = mapLink.trim();
+
+  // 1. Sudah berupa Embed URL
+  if (link.includes('/maps/embed')) return link;
+
+  // 2. Koordinat mentah: "lat,lng"
+  if (/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(link)){
+    return `https://www.google.com/maps?q=${link}&output=embed`;
+  }
+
+  // 3. Koordinat @lat,lng di URL
+  let m = link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (m) return `https://www.google.com/maps?q=${m[1]},${m[2]}&output=embed`;
+
+  // 4. Koordinat di query ?q=lat,lng
+  m = link.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (m) return `https://www.google.com/maps?q=${m[1]},${m[2]}&output=embed`;
+
+  // 5. Nama tempat di /place/Nama/
+  m = link.match(/\/place\/([^\/@?]+)/);
+  if (m){
+    return `https://www.google.com/maps?q=${encodeURIComponent(decodeURIComponent(m[1]))}&output=embed`;
+  }
+
+  // 6. Nama tempat di query ?q=Nama
+  m = link.match(/[?&]q=([^&]+)/);
+  if (m && !/^https?%3A/i.test(m[1]) && !/^https?:/i.test(m[1])){
+    return `https://www.google.com/maps?q=${m[1]}&output=embed`;
+  }
+
+  // 7. Short link (maps.app.goo.gl / goo.gl/maps) -> tidak bisa di-embed murni client-side
+  return null;
+}
+
 function renderLocation(){
   document.getElementById('addressText').textContent = DATA.address;
   document.getElementById('hoursText').textContent = DATA.hours;
-  const mapsHref = DATA.mapLink || '#';
-  document.getElementById('hubungiLink').href = mapsHref;
+  const hubungiLink = document.getElementById('hubungiLink');
   const mapBtn = document.getElementById('mapBtn');
-  mapBtn.href = mapsHref;
-  mapBtn.addEventListener('click', e => { if (!DATA.mapLink) e.preventDefault(); });
+
+  if (DATA.mapLink) {
+    hubungiLink.href = DATA.mapLink;
+    mapBtn.href = DATA.mapLink;
+
+    const embedSrc = getMapEmbedUrl(DATA.mapLink);
+    if (embedSrc) {
+      mapBtn.innerHTML = `<iframe src="${embedSrc}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+    } else {
+      // Short link — tampilkan tombol "Buka di Google Maps" yang tetap mengikuti link
+      mapBtn.innerHTML = `
+        <div class="tsk-map-fallback">
+          <div>
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            <div style="font-size:14px; font-weight:600; margin-top:8px; color:var(--accent);">Buka Peta Lokasi</div>
+            <div style="font-size:11px; opacity:.75; margin-top:4px;">Klik untuk melihat di Google Maps</div>
+          </div>
+        </div>`;
+    }
+  } else {
+    hubungiLink.href = '#';
+    mapBtn.href = '#';
+    mapBtn.innerHTML = `<div class="tsk-placeholder" style="width:100%;height:100%;border-radius:inherit;">Peta Lokasi</div>`;
+    mapBtn.addEventListener('click', e => e.preventDefault());
+  }
 }
 
 renderLogo();

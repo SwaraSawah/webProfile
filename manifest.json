@@ -8,15 +8,15 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/do4j9uw5r/image/upload/v1/default-logo.png",
+      "src": "https://images.unsplash.com/photo-1543353071-873f17a7a088?w=192&h=192&fit=crop",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "https://res.cloudinary.com/do4j9uw5r/image/upload/v1/default-logo.png",
+      "src": "https://images.unsplash.com/photo-1543353071-873f17a7a088?w=512&h=512&fit=crop",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]
